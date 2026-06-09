@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curious Head Labs</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --p: #7F77DD;
+  --pl: #EEEDFE;
+  --pd: #3C3489;
+  --t: #1D9E75;
+  --tl: #E1F5EE;
+  --c: #D85A30;
+  --cl: #FAECE7;
+  --bg: #fafaf9;
+  --bg2: #f2f1ee;
+  --tx: #111110;
+  --tx2: #6f6e6b;
+  --tx3: #b0afa9;
+  --br: rgba(0,0,0,0.08);
+  --br2: rgba(0,0,0,0.14);
+  --r: 6px;
+  --rl: 10px;
+  --max: 860px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111110;
+    --bg2: #1c1c1b;
+    --tx: #f0efec;
+    --tx2: #908e87;
+    --tx3: #4e4d4a;
+    --br: rgba(255,255,255,0.07);
+    --br2: rgba(255,255,255,0.13);
+    --pl: #1e1c3a;
+    --pd: #a09bf0;
+    --tl: #0f2720;
+    --cl: #2a180e;
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--tx); line-height: 1.6; min-height: 100vh; }
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 56px;
+  border-bottom: 0.5px solid var(--br);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 50;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--p);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.logo-text {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--tx);
+}
+.logo-text span { color: var(--p); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.nav-link {
+  font-size: 13px;
+  color: var(--tx2);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: var(--r);
+  transition: color .15s, background .15s;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+}
+.nav-link:hover { color: var(--tx); }
+.nav-link.active { color: var(--tx); font-weight: 500; }
+.nav-link.cta {
+  background: var(--p);
+  color: #fff;
+  font-weight: 500;
+  margin-left: 8px;
+  padding: 6px 16px;
+}
+.nav-link.cta:hover { background: var(--pd); color: #fff; }
+
+/* ── PAGE SHELL ── */
+#app { display: none; }
+#app.ready { display: block; }
+.page { display: none; max-width: var(--max); margin: 0 auto; padding: 0 2.5rem; }
+.page.active { display: block; }
+
+/* ── SHARED TYPOGRAPHY ── */
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--tx3);
+  margin-bottom: .5rem;
+}
+.page-title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+  margin-bottom: .6rem;
+}
+.page-sub {
+  font-size: 16px;
+  color: var(--tx2);
+  line-height: 1.75;
+  max-width: 520px;
+  margin-bottom: 3rem;
+}
+.divider {
+  height: 0.5px;
+  background: var(--br);
+  margin: 2.5rem 0;
+}
+
+/* ══════════════════
+   HOME PAGE
+══════════════════ */
+#page-home { padding-top: 5rem; padding-bottom: 5rem; }
+.home-hero { margin-bottom: 4rem; }
+.home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--pl);
+  color: var(--pd);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  letter-spacing: .2px;
+}
+.pulse-ring {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--t);
+  animation: pulseRing 2.2s ease-in-out infinite;
+}
+@keyframes pulseRing {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .3; transform: scale(1.5); }
+}
+.home-h1 {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -2.5px;
+  line-height: 1.0;
+  margin-bottom: 1.25rem;
+  max-width: 600px;
+}
+.home-h1 em { font-style: normal; color: var(--p); }
+.typed-cursor {
+  display: inline-block;
+  border-right: 3px solid var(--p);
+  padding-right: 2px;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%,100% { border-color: var(--p); } 50% { border-color: transparent; } }
+.home-sub {
+  font-size: 18px;
+  color: var(--tx2);
+  line-height: 1.7;
+  max-width: 440px;
+  margin-bottom: 2.25rem;
+}
+.home-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  padding: 10px 22px;
+  background: var(--tx);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+  font-family: inherit;
+}
+.btn-primary:hover { opacity: .8; }
+.btn-ghost {
+  padding: 10px 22px;
+  background: transparent;
+  color: var(--tx);
+  border: 0.5px solid var(--br2);
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+  font-family: inherit;
+}
+.btn-ghost:hover { background: var(--bg2); }
+
+/* Lab illustration */
+.lab-illustration {
+  margin-top: 3.5rem;
+  background: var(--bg2);
+  border: 0.5px solid var(--br);
+  border-radius: var(--rl);
+  padding: 2rem;
+}
+.lab-label {
+  font-size: 11px;
+  color: var(--tx3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 1.5rem;
+}
+.beakers-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+.bkr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.bkr-lbl { font-size: 12px; color: var(--tx2); font-weight: 500; }
+.op { color: var(--tx3); font-size: 20px; padding-bottom: 18px; user-select: none; }
+
+/* Stats */
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--br);
+  border: 0.5px solid var(--br);
+  border-radius: var(--rl);
+  overflow: hidden;
+  margin-bottom: 4rem;
+}
+.stat-cell {
+  background: var(--bg);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+}
+.stat-n {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--tx);
+  display: block;
+}
+.stat-l {
+  font-size: 12px;
+  color: var(--tx3);
+  margin-top: 2px;
+}
+
+
+
+/* ══════════════════
+   PROJECTS PAGE
+══════════════════ */
+#page-projects { padding-top: 3.5rem; padding-bottom: 4rem; }
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.filter-btn {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 0.5px solid var(--br2);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tx2);
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.filter-btn:hover { color: var(--tx); border-color: var(--tx3); }
+.filter-btn.on { background: var(--tx); color: var(--bg); border-color: var(--tx); }
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--br);
+  border: 0.5px solid var(--br);
+  border-radius: var(--rl);
+  overflow: hidden;
+}
+.proj-card {
+  background: var(--bg);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: background .15s;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+.proj-card:hover { background: var(--bg2); }
+.proj-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.proj-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+.proj-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: .2px;
+}
+.status-live { background: var(--tl); color: var(--t); }
+.status-beta { background: var(--pl); color: var(--p); }
+.status-wip  { background: var(--bg2); color: var(--tx3); }
+.proj-title { font-size: 15px; font-weight: 600; }
+.proj-desc { font-size: 13px; color: var(--tx2); line-height: 1.65; }
+.proj-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.proj-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--tx2);
+  background: var(--bg2);
+  border: 0.5px solid var(--br);
+}
+.proj-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.proj-stat { font-size: 12px; color: var(--tx3); }
+.proj-link { font-size: 12px; color: var(--p); font-weight: 500; display: flex; align-items: center; gap: 3px; }
+
+
+/* ══════════════════
+   CONTACT PAGE
+══════════════════ */
+#page-contact { padding-top: 3.5rem; padding-bottom: 4rem; }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+.contact-left { display: flex; flex-direction: column; gap: 1.5rem; }
+.contact-link-row {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: 1rem;
+  border: 0.5px solid var(--br);
+  border-radius: var(--rl);
+  text-decoration: none;
+  color: var(--tx);
+  transition: border-color .15s;
+  background: var(--bg);
+}
+.contact-link-row:hover { border-color: var(--br2); }
+.cl-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.cl-label { font-size: 12px; color: var(--tx3); margin-bottom: 1px; }
+.cl-value { font-size: 14px; font-weight: 500; }
+.contact-right {}
+.availability-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--br);
+  border-radius: var(--rl);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.avail-title { font-size: 13px; font-weight: 600; margin-bottom: 1rem; }
+.avail-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  margin-bottom: .75rem;
+}
+.avail-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--t);
+  animation: pulseRing 2s infinite;
+}
+.avail-note { font-size: 13px; color: var(--tx2); line-height: 1.65; }
+.tz-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.tz-cell { flex: 1; }
+.tz-lbl { font-size: 11px; color: var(--tx3); margin-bottom: 2px; }
+.tz-val { font-size: 13px; font-weight: 500; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--tx2); display: block; margin-bottom: 6px; letter-spacing: .2px; }
+.form-input, .form-textarea {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg);
+  border: 0.5px solid var(--br2);
+  border-radius: var(--r);
+  color: var(--tx);
+  outline: none;
+  transition: border-color .15s;
+  display: block;
+}
+.form-input:focus, .form-textarea:focus { border-color: var(--p); }
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-row { margin-bottom: 1.1rem; }
+.form-submit {
+  width: 100%;
+  padding: 11px;
+  background: var(--tx);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .15s;
+  margin-top: .25rem;
+}
+.form-submit:hover { opacity: .8; }
+.form-sent { display: none; text-align: center; padding: 2rem 1rem; color: var(--tx2); font-size: 14px; }
+.form-sent i { font-size: 28px; color: var(--t); display: block; margin-bottom: .75rem; }
+
+/* ══════════════════
+   HIRE ME PAGE
+══════════════════ */
+#page-hire { padding-top: 3.5rem; padding-bottom: 4rem; }
+.hire-columns {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  align-items: start;
+}
+.service-list { display: flex; flex-direction: column; gap: 0; }
+.service-item {
+  padding: 1.4rem 0;
+  border-bottom: 0.5px solid var(--br);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.service-item:first-child { border-top: 0.5px solid var(--br); }
+.service-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--tx3);
+  width: 20px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.service-info {}
+.service-title { font-size: 15px; font-weight: 600; margin-bottom: .3rem; }
+.service-desc { font-size: 13px; color: var(--tx2); line-height: 1.65; }
+.service-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: .6rem; }
+.service-tag { font-size: 11px; color: var(--tx3); background: var(--bg2); border: 0.5px solid var(--br); border-radius: 4px; padding: 1px 7px; font-weight: 500; }
+.hire-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+.hire-cta-row { margin-top: .5rem; }
+.hire-cta-row button {
+  width: 100%;
+  padding: 11px;
+  background: var(--p);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+}
+.hire-cta-row button:hover { background: var(--pd); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" onclick="navigate('home')">
+    <div class="logo-mark">
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="8" r="4"/>
+        <path d="M9 12v4M6 16h6M5 5.5C5 3 7 1 9 1s4 2 4 4.5"/>
+      </svg>
+    </div>
+    <span class="logo-text">curious<span>head</span>labs</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" id="nl-projects" onclick="navigate('projects')">Projects</a>
+    <a class="nav-link" id="nl-contact"  onclick="navigate('contact')">Contact</a>
+    <a class="nav-link cta" id="nl-hire" onclick="navigate('hire')">Hire me</a>
+  </div>
+</nav>
+
+<div id="app">
+
+<!-- ══ HOME ══ -->
+<div class="page" id="page-home">
+  <div class="home-hero">
+    <div class="home-badge"><span class="pulse-ring"></span>Open to new experiments</div>
+    <h1 class="home-h1">A lab for<br><em><span id="typed"></span><span class="typed-cursor"></span></em></h1>
+    <p class="home-sub">Backend engineer obsessed with systems that hold up — under load, under pressure, and at 3am.</p>
+    <div class="home-actions">
+      <button class="btn-primary" onclick="navigate('projects')">View projects</button>
+      <button class="btn-ghost"   onclick="navigate('contact')">Get in touch</button>
+    </div>
+  </div>
+
+  <div class="lab-illustration">
+    <div class="lab-label">The formula</div>
+    <div class="beakers-row">
+      <div class="bkr">
+        <svg width="48" height="60" viewBox="0 0 48 60" fill="none">
+          <rect x="16" y="2" width="16" height="18" rx="2" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <path d="M16 18L6 50Q5 54 9 54H39Q43 54 42 50L32 18Z" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.5"/>
+          <ellipse cx="24" cy="47" rx="11" ry="4" fill="#AFA9EC"/>
+          <circle cx="19" cy="40" r="3" fill="#7F77DD" opacity=".4"/>
+          <circle cx="29" cy="37" r="2.5" fill="#7F77DD" opacity=".3"/>
+        </svg>
+        <div class="bkr-lbl">Curiosity</div>
+      </div>
+      <div class="op">+</div>
+      <div class="bkr">
+        <svg width="48" height="60" viewBox="0 0 48 60" fill="none">
+          <rect x="16" y="2" width="16" height="18" rx="2" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <path d="M16 18L6 50Q5 54 9 54H39Q43 54 42 50L32 18Z" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.5"/>
+          <ellipse cx="24" cy="47" rx="11" ry="4" fill="#5DCAA5"/>
+          <circle cx="18" cy="39" r="2.5" fill="#1D9E75" opacity=".4"/>
+          <circle cx="29" cy="43" r="3.5" fill="#1D9E75" opacity=".3"/>
+        </svg>
+        <div class="bkr-lbl">Craft</div>
+      </div>
+      <div class="op">=</div>
+      <div class="bkr">
+        <svg width="48" height="60" viewBox="0 0 48 60" fill="none">
+          <rect x="16" y="2" width="16" height="18" rx="2" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <path d="M16 18L6 50Q5 54 9 54H39Q43 54 42 50L32 18Z" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+          <ellipse cx="24" cy="47" rx="11" ry="4" fill="#F0997B"/>
+          <path d="M15 38Q24 30 33 40" stroke="#D85A30" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="bkr-lbl">Impact</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="home-stats" id="home-stats">
+    <div class="stat-cell"><span class="stat-n" id="sn0">0</span><div class="stat-l">Systems shipped</div></div>
+    <div class="stat-cell"><span class="stat-n" id="sn1">0</span><div class="stat-l">Years in backend</div></div>
+    <div class="stat-cell"><span class="stat-n" id="sn2">0</span><div class="stat-l">Teams supported</div></div>
+    <div class="stat-cell"><span class="stat-n" id="sn3">∞</span><div class="stat-l">Open questions</div></div>
+  </div>
+
+</div>
+
+<!-- ══ PROJECTS ══ -->
+<div class="page" id="page-projects">
+  <div class="eyebrow">The work</div>
+  <div class="page-title">Systems & services</div>
+  <p class="page-sub">Backend systems, infrastructure tools, and open-source experiments. Built to be reliable, not just functional.</p>
+
+  <div class="filter-bar" id="proj-filter">
+    <button class="filter-btn on" data-f="all">All</button>
+    <button class="filter-btn" data-f="infra">Infrastructure</button>
+    <button class="filter-btn" data-f="ai">AI / ML</button>
+    <button class="filter-btn" data-f="data">Data</button>
+    <button class="filter-btn" data-f="oss">Open source</button>
+  </div>
+  <div class="projects-grid" id="proj-grid"></div>
+</div>
+
+
+<!-- ══ CONTACT ══ -->
+<div class="page" id="page-contact">
+  <div class="eyebrow">Get in touch</div>
+  <div class="page-title">Start a conversation</div>
+  <p class="page-sub">Questions, collaborations, or just a curious thought — the door's open.</p>
+
+  <div class="contact-grid">
+    <div class="contact-left">
+      <a class="contact-link-row" href="mailto:hello@curiousheadlabs.com">
+        <div class="cl-icon"><i class="ti ti-mail" style="color:#7F77DD"></i></div>
+        <div>
+          <div class="cl-label">Email</div>
+          <div class="cl-value">hello@curiousheadlabs.com</div>
+        </div>
+      </a>
+      <a class="contact-link-row" href="https://github.com/curiousheadlabs" target="_blank">
+        <div class="cl-icon"><i class="ti ti-brand-github" style="color:#7F77DD"></i></div>
+        <div>
+          <div class="cl-label">GitHub</div>
+          <div class="cl-value">github.com/curiousheadlabs</div>
+        </div>
+      </a>
+      <a class="contact-link-row" href="https://twitter.com/curiousheadlabs" target="_blank">
+        <div class="cl-icon"><i class="ti ti-brand-twitter" style="color:#7F77DD"></i></div>
+        <div>
+          <div class="cl-label">Twitter / X</div>
+          <div class="cl-value">@curiousheadlabs</div>
+        </div>
+      </a>
+      <a class="contact-link-row" href="https://linkedin.com" target="_blank">
+        <div class="cl-icon"><i class="ti ti-brand-linkedin" style="color:#7F77DD"></i></div>
+        <div>
+          <div class="cl-label">LinkedIn</div>
+          <div class="cl-value">linkedin.com/in/curiousheadlabs</div>
+        </div>
+      </a>
+      <div class="availability-card">
+        <div class="avail-title">Availability</div>
+        <div class="avail-status"><span class="avail-dot"></span> Currently available for new projects</div>
+        <div class="avail-note">Typical response time is under 24 hours. For urgent work, mention it in the subject line.</div>
+        <div class="tz-row">
+          <div class="tz-cell"><div class="tz-lbl">Timezone</div><div class="tz-val">UTC+0 / GMT</div></div>
+          <div class="tz-cell"><div class="tz-lbl">Works with</div><div class="tz-val">All timezones</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-right">
+      <div id="contact-form-wrap">
+        <div class="form-row">
+          <label class="form-label" for="f-name">Name</label>
+          <input class="form-input" id="f-name" type="text" placeholder="Your name">
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="f-email">Email</label>
+          <input class="form-input" id="f-email" type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="f-subject">What's it about?</label>
+          <input class="form-input" id="f-subject" type="text" placeholder="System design, advisory, infrastructure work…">
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="f-msg">Message</label>
+          <textarea class="form-textarea" id="f-msg" placeholder="Tell me more…"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Send message</button>
+      </div>
+      <div class="form-sent" id="form-sent">
+        <i class="ti ti-circle-check"></i>
+        Message sent. I'll be in touch soon.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HIRE ME ══ -->
+<div class="page" id="page-hire">
+  <div class="eyebrow">Work together</div>
+  <div class="page-title">Hire the lab</div>
+  <p class="page-sub">Backend and infrastructure work, done carefully. I take on a small number of engagements at a time so each one gets the attention it deserves.</p>
+
+  <div class="hire-columns">
+    <div>
+      <div class="service-list">
+        <div class="service-item">
+          <div class="service-num">01</div>
+          <div class="service-info">
+            <div class="service-title">Backend system design & build</div>
+            <div class="service-desc">Greenfield services or untangling a monolith that's outgrown itself. API design, service boundaries, persistence layer, observability — built to be handed off to a team, not just to work.</div>
+            <div class="service-tags"><span class="service-tag">Python</span><span class="service-tag">Go</span><span class="service-tag">PostgreSQL</span><span class="service-tag">gRPC</span><span class="service-tag">REST</span></div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">02</div>
+          <div class="service-info">
+            <div class="service-title">AI / LLM backend infrastructure</div>
+            <div class="service-desc">The plumbing behind AI products: prompt pipelines, RAG systems, eval frameworks, model routing, and the observability to know when something silently breaks. No hand-waving about "prompt engineering".</div>
+            <div class="service-tags"><span class="service-tag">LLM pipelines</span><span class="service-tag">RAG</span><span class="service-tag">Evals</span><span class="service-tag">Vector DBs</span><span class="service-tag">Fine-tuning</span></div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">03</div>
+          <div class="service-info">
+            <div class="service-title">Infrastructure & platform engineering</div>
+            <div class="service-desc">Cloud infrastructure that engineers can actually understand. Event streaming, job queues, service mesh, IaC — with runbooks and alerting so on-call isn't a nightmare.</div>
+            <div class="service-tags"><span class="service-tag">AWS / GCP</span><span class="service-tag">Kafka</span><span class="service-tag">Kubernetes</span><span class="service-tag">Terraform</span><span class="service-tag">Datadog</span></div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">04</div>
+          <div class="service-info">
+            <div class="service-title">Staff engineering advisory</div>
+            <div class="service-desc">A thinking partner for engineering leaders. Architecture reviews, RFC feedback, technical strategy, growing senior engineers — by the hour or on retainer. Useful when you need a second opinion without hiring a VP.</div>
+            <div class="service-tags"><span class="service-tag">Architecture review</span><span class="service-tag">RFC process</span><span class="service-tag">Tech strategy</span><span class="service-tag">Eng levelling</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hire-sidebar">
+      <div class="hire-cta-row">
+        <button onclick="navigate('contact')">Start a conversation <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<script>
+/* ────────────────────────
+   ROUTER
+──────────────────────── */
+const pages = ['home','projects','contact','hire'];
+function navigate(page) {
+  pages.forEach(p => {
+    document.getElementById('page-'+p).classList.toggle('active', p === page);
+    const nl = document.getElementById('nl-'+p);
+    if (nl) nl.classList.toggle('active', p === page);
+  });
+  window.scrollTo(0, 0);
+  if (page === 'projects') renderProjects();
+  if (page === 'home')     startCounters();
+  location.hash = '#/' + (page === 'home' ? '' : page);
+}
+function initRouter() {
+  const hash = location.hash.replace('#/', '').replace('#', '');
+  const page = pages.includes(hash) ? hash : 'home';
+  navigate(page);
+  document.getElementById('app').classList.add('ready');
+}
+window.addEventListener('hashchange', () => {
+  const hash = location.hash.replace('#/', '').replace('#', '');
+  if (pages.includes(hash)) navigate(hash);
+});
+
+/* ────────────────────────
+   TYPEWRITER
+──────────────────────── */
+const phrases = ["distributed systems","backend infrastructure","APIs that scale","reliable pipelines","backend engineering"];
+let pi = 0, ci = 0, del = false;
+function type() {
+  const el = document.getElementById('typed');
+  if (!el) return;
+  const ph = phrases[pi];
+  if (!del) { el.textContent = ph.slice(0, ci + 1); ci++; if (ci === ph.length) { del = true; setTimeout(type, 1500); return; } }
+  else       { el.textContent = ph.slice(0, ci - 1); ci--; if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; } }
+  setTimeout(type, del ? 48 : 100);
+}
+setTimeout(type, 400);
+
+/* ────────────────────────
+   COUNTERS
+──────────────────────── */
+let countersRun = false;
+function startCounters() {
+  if (countersRun) return;
+  countersRun = true;
+  const targets = [24, 6, 12];
+  targets.forEach((t, i) => {
+    const el = document.getElementById('sn' + i);
+    if (!el) return;
+    let start = null;
+    (function step(ts) {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / 1000, 1);
+      el.textContent = Math.round(p * t);
+      if (p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  });
+}
+
+/* ────────────────────────
+   PROJECTS DATA & RENDER
+──────────────────────── */
+const projs = [
+  { t:"Gatekeeper",   d:"Auth and rate-limiting service handling 50k req/s. Token bucket algorithm, Redis-backed, with per-tenant policy config.", tags:["Infrastructure","Open source"], f:["infra","oss"], status:"live", stat:"12 teams", bg:"#EEEDFE", ic:"ti-shield-lock",  icc:"#7F77DD" },
+  { t:"Logbook",      d:"Structured experiment logging for ML practitioners. Postgres-backed event store with a gRPC API and replay support.", tags:["AI / ML","Open source"], f:["ai","oss"], status:"live", stat:"870 stars", bg:"#E1F5EE", ic:"ti-list-check",  icc:"#1D9E75" },
+  { t:"Streamline",   d:"Internal event-streaming platform built on Kafka. Schema registry, dead-letter handling, and lag alerting baked in.", tags:["Infrastructure","Data"], f:["infra","data"], status:"live", stat:"Active", bg:"#FAECE7", ic:"ti-activity",     icc:"#D85A30" },
+  { t:"Promptsmith",  d:"LLM prompt evaluation pipeline. Runs evals against a versioned prompt registry, stores traces, surfaces regressions.", tags:["AI / ML","Open source"], f:["ai","oss"], status:"beta", stat:"Beta", bg:"#EEEDFE", ic:"ti-wand",          icc:"#7F77DD" },
+  { t:"Cartographer", d:"Internal service dependency mapper. Scrapes OpenAPI specs and runtime traces to build a live graph of who calls who.", tags:["Infrastructure"], f:["infra"], status:"live", stat:"3 orgs", bg:"#E1F5EE", ic:"ti-topology-star",  icc:"#1D9E75" },
+  { t:"Waterline",    d:"Data pipeline observability tool. Tracks row counts, schema drift, and SLA breaches across Airflow DAGs.", tags:["Data","Open source"], f:["data","oss"], status:"beta", stat:"Beta", bg:"#FAECE7", ic:"ti-chart-dots",   icc:"#D85A30" },
+];
+let projFilter = 'all';
+function renderProjects() {
+  const g = document.getElementById('proj-grid');
+  if (!g) return;
+  const list = projFilter === 'all' ? projs : projs.filter(p => p.f.includes(projFilter));
+  g.innerHTML = list.map(p => `
+    <div class="proj-card">
+      <div class="proj-card-head">
+        <div class="proj-icon" style="background:${p.bg}"><i class="ti ${p.ic}" style="color:${p.icc}"></i></div>
+        <span class="proj-status status-${p.status}">${p.status === 'live' ? 'Live' : p.status === 'beta' ? 'Beta' : 'WIP'}</span>
+      </div>
+      <div class="proj-title">${p.t}</div>
+      <div class="proj-desc">${p.d}</div>
+      <div class="proj-tags">${p.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')}</div>
+      <div class="proj-footer">
+        <span class="proj-stat"><i class="ti ti-users" style="font-size:11px;vertical-align:-1px"></i> ${p.stat}</span>
+        <span class="proj-link">View <i class="ti ti-arrow-right" style="font-size:12px"></i></span>
+      </div>
+    </div>`).join('');
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  projFilter = btn.dataset.f;
+  renderProjects();
+});
+
+
+/* ────────────────────────
+   CONTACT FORM
+──────────────────────── */
+function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if (!name || !email) { alert('Please fill in your name and email.'); return; }
+  document.getElementById('contact-form-wrap').style.display = 'none';
+  document.getElementById('form-sent').style.display = 'block';
+}
+
+/* ────────────────────────
+   BOOT
+──────────────────────── */
+initRouter();
+</script>
+</body>
+</html>
