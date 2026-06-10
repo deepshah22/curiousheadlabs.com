@@ -553,7 +553,7 @@ nav {
   </a>
   <div class="nav-links">
     <a class="nav-link" id="nl-projects" onclick="navigate('projects')">Projects</a>
-    <a class="nav-link" id="nl-contact"  onclick="navigate('contact')">Contact</a>
+    <a class="nav-link" id="nl-contact"  onclick="navigate('contact')">Contact</a>    
     <a class="nav-link cta" id="nl-hire" onclick="navigate('hire')">Hire me</a>
   </div>
 </nav>
@@ -832,6 +832,7 @@ function startCounters() {
    PROJECTS DATA & RENDER
 ──────────────────────── */
 const projs = [
+  { t:"Dear Little Me", d:"Upload photos and memories. AI writes a heartfelt letter your child will open at 18.", tags:["AI / ML","Product"], f:["ai","oss"], status:"live", stat:"New", bg:"#FBEAF0", ic:"ti-heart", icc:"#D4537E", url:"dearlittleme/index.html" },
   { t:"Gatekeeper",   d:"Auth and rate-limiting service handling 50k req/s. Token bucket algorithm, Redis-backed, with per-tenant policy config.", tags:["Infrastructure","Open source"], f:["infra","oss"], status:"live", stat:"12 teams", bg:"#EEEDFE", ic:"ti-shield-lock",  icc:"#7F77DD" },
   { t:"Logbook",      d:"Structured experiment logging for ML practitioners. Postgres-backed event store with a gRPC API and replay support.", tags:["AI / ML","Open source"], f:["ai","oss"], status:"live", stat:"870 stars", bg:"#E1F5EE", ic:"ti-list-check",  icc:"#1D9E75" },
   { t:"Streamline",   d:"Internal event-streaming platform built on Kafka. Schema registry, dead-letter handling, and lag alerting baked in.", tags:["Infrastructure","Data"], f:["infra","data"], status:"live", stat:"Active", bg:"#FAECE7", ic:"ti-activity",     icc:"#D85A30" },
@@ -845,7 +846,7 @@ function renderProjects() {
   if (!g) return;
   const list = projFilter === 'all' ? projs : projs.filter(p => p.f.includes(projFilter));
   g.innerHTML = list.map(p => `
-    <div class="proj-card">
+    <div class="proj-card" ${p.url ? `onclick="window.location='${p.url}'"` : ''} style="${p.url ? 'cursor:pointer' : ''}">
       <div class="proj-card-head">
         <div class="proj-icon" style="background:${p.bg}"><i class="ti ${p.ic}" style="color:${p.icc}"></i></div>
         <span class="proj-status status-${p.status}">${p.status === 'live' ? 'Live' : p.status === 'beta' ? 'Beta' : 'WIP'}</span>
@@ -855,7 +856,7 @@ function renderProjects() {
       <div class="proj-tags">${p.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')}</div>
       <div class="proj-footer">
         <span class="proj-stat"><i class="ti ti-users" style="font-size:11px;vertical-align:-1px"></i> ${p.stat}</span>
-        <span class="proj-link">View <i class="ti ti-arrow-right" style="font-size:12px"></i></span>
+        <span class="proj-link">${p.url ? 'Try it' : 'View'} <i class="ti ti-arrow-right" style="font-size:12px"></i></span>
       </div>
     </div>`).join('');
 }
