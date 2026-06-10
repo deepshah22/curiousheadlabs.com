@@ -274,6 +274,14 @@ footer a:hover { color: var(--tx); }
     <div class="form-card">
 
       <div class="form-row">
+        <div class="form-label"><i class="ti ti-key"></i>OpenAI API key</div>
+        <input class="f-input" id="api-key" type="password" placeholder="sk-…" autocomplete="off">
+        <div class="char-note" style="margin-top:4px">Your key is never stored — used only for this session. Get one at <a href="https://platform.openai.com/api-keys" target="_blank" style="color:var(--pink)">platform.openai.com/api-keys</a></div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-row">
         <div class="form-label"><i class="ti ti-user-heart"></i>Child's name &amp; age today</div>
         <div class="input-row">
           <input class="f-input" id="child-name" type="text" placeholder="e.g. Lily" style="flex:2">
@@ -405,6 +413,12 @@ function getMilestones() {
 }
 
 async function generateLetter() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!apiKey) {
+    alert('Please enter your OpenAI API key to generate the letter.');
+    return;
+  }
+
   const name = document.getElementById('child-name').value.trim() || 'my little one';
   const age  = document.getElementById('child-age').value.trim();
   const milestones = getMilestones();
@@ -432,35 +446,42 @@ async function generateLetter() {
   const user = `Write a letter to my child ${name}${age ? ', who is ' + age + ' years old today' : ''}.\n\n${msText}\n\n${msg ? 'From my heart to weave in:\n' + msg : ''}\n\n${photoInstruction}\n\nSigned: ${from}\n\nThis letter will be sealed and opened on their 18th birthday. Make it something they'll read many times.`;
 
   try {
-    const messages = [];
+    const userContent = [];
     if (photoData) {
-      const b64  = photoData.split(',')[1];
-      const mime = (photoData.match(/data:([^;]+);/) || [])[1] || 'image/jpeg';
-      messages.push({
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mime, data: b64 } },
-          { type: 'text', text: user }
-        ]
-      });
-    } else {
-      messages.push({ role: 'user', content: user });
+      userContent.push({ type: 'image_url', image_url: { url: photoData } });
     }
+    userContent.push({ type: 'text', text: user });
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system, messages })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        max_tokens: 1000,
+        messages: [
+          { role: 'system', content: system },
+          { role: 'user', content: userContent }
+        ]
+      })
     });
 
     const data = await res.json();
     document.getElementById('letter-loading').style.display = 'none';
+
+    if (data.error) {
+      document.getElementById('letter-body').textContent = 'API error: ' + data.error.message;
+      return;
+    }
+
     document.getElementById('letter-body').textContent =
-      data.content?.find(b => b.type === 'text')?.text || 'Something went wrong. Please try again.';
+      data.choices?.[0]?.message?.content || 'Something went wrong. Please try again.';
 
   } catch (err) {
     document.getElementById('letter-loading').style.display = 'none';
-    document.getElementById('letter-body').textContent = 'Something went wrong. Please try again.';
+    document.getElementById('letter-body').textContent = 'Error: ' + err.message;
   }
 }
 
@@ -471,9 +492,11 @@ function rewrite() {
 }
 
 function resetForm() {
+  const key = document.getElementById('api-key').value;
   document.getElementById('letter-section').classList.remove('visible');
   document.getElementById('form-section').style.display = 'block';
   document.getElementById('letter-body').textContent = '';
+  document.getElementById('api-key').value = key;
   photoData = null;
   document.getElementById('photo-previews').innerHTML = '';
   document.getElementById('photo-zone').querySelector('.photo-zone-text').textContent = 'Tap to upload a photo';
