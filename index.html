@@ -628,10 +628,9 @@ nav {
 
   <div class="filter-bar" id="proj-filter">
     <button class="filter-btn on" data-f="all">All</button>
-    <button class="filter-btn" data-f="infra">Infrastructure</button>
     <button class="filter-btn" data-f="ai">AI / ML</button>
-    <button class="filter-btn" data-f="data">Data</button>
-    <button class="filter-btn" data-f="oss">Open source</button>
+    <button class="filter-btn" data-f="coding">Coding</button>
+    <button class="filter-btn" data-f="cms">CMS</button>
   </div>
   <div class="projects-grid" id="proj-grid"></div>
 </div>
@@ -832,13 +831,8 @@ function startCounters() {
    PROJECTS DATA & RENDER
 ──────────────────────── */
 const projs = [
-  { t:"Dear Little Me", d:"Upload photos and memories. AI writes a heartfelt letter your child will open at 18.", tags:["AI / ML","Product"], f:["ai","oss"], status:"live", stat:"New", bg:"#FBEAF0", ic:"ti-heart", icc:"#D4537E", url:"dearlittleme/index.html" },
-  { t:"Gatekeeper",   d:"Auth and rate-limiting service handling 50k req/s. Token bucket algorithm, Redis-backed, with per-tenant policy config.", tags:["Infrastructure","Open source"], f:["infra","oss"], status:"live", stat:"12 teams", bg:"#EEEDFE", ic:"ti-shield-lock",  icc:"#7F77DD" },
-  { t:"Logbook",      d:"Structured experiment logging for ML practitioners. Postgres-backed event store with a gRPC API and replay support.", tags:["AI / ML","Open source"], f:["ai","oss"], status:"live", stat:"870 stars", bg:"#E1F5EE", ic:"ti-list-check",  icc:"#1D9E75" },
-  { t:"Streamline",   d:"Internal event-streaming platform built on Kafka. Schema registry, dead-letter handling, and lag alerting baked in.", tags:["Infrastructure","Data"], f:["infra","data"], status:"live", stat:"Active", bg:"#FAECE7", ic:"ti-activity",     icc:"#D85A30" },
-  { t:"Promptsmith",  d:"LLM prompt evaluation pipeline. Runs evals against a versioned prompt registry, stores traces, surfaces regressions.", tags:["AI / ML","Open source"], f:["ai","oss"], status:"beta", stat:"Beta", bg:"#EEEDFE", ic:"ti-wand",          icc:"#7F77DD" },
-  { t:"Cartographer", d:"Internal service dependency mapper. Scrapes OpenAPI specs and runtime traces to build a live graph of who calls who.", tags:["Infrastructure"], f:["infra"], status:"live", stat:"3 orgs", bg:"#E1F5EE", ic:"ti-topology-star",  icc:"#1D9E75" },
-  { t:"Waterline",    d:"Data pipeline observability tool. Tracks row counts, schema drift, and SLA breaches across Airflow DAGs.", tags:["Data","Open source"], f:["data","oss"], status:"beta", stat:"Beta", bg:"#FAECE7", ic:"ti-chart-dots",   icc:"#D85A30" },
+  { t:"Dear Little Me",      d:"Upload photos and memories. AI writes a heartfelt letter your child will open at 18.", tags:["AI / ML","Product"], f:["ai"], status:"live", stat:"New", bg:"#FBEAF0", ic:"ti-heart", icc:"#D4537E", url:"dearlittleme/index.html" },
+  { t:"Interview Daemon",    d:"One place to find all coding problems and their basic solutions for competitive programming and interviews.", tags:["coding","CMS"], f:["coding","cms"], status:"live", stat:"Active", bg:"#E1F5EE", ic:"ti-code", icc:"#1D9E75", url:"https://interviewdaemon.wasmer.app/" },
 ];
 let projFilter = 'all';
 function renderProjects() {
@@ -846,7 +840,7 @@ function renderProjects() {
   if (!g) return;
   const list = projFilter === 'all' ? projs : projs.filter(p => p.f.includes(projFilter));
   g.innerHTML = list.map(p => `
-    <div class="proj-card" ${p.url ? `onclick="window.location='${p.url}'"` : ''} style="${p.url ? 'cursor:pointer' : ''}">
+    <div class="proj-card" ${p.url ? `onclick="${p.url.startsWith('http') ? `window.open('${p.url}','_blank')` : `window.location='${p.url}'`}"` : ''} style="${p.url ? 'cursor:pointer' : ''}">
       <div class="proj-card-head">
         <div class="proj-icon" style="background:${p.bg}"><i class="ti ${p.ic}" style="color:${p.icc}"></i></div>
         <span class="proj-status status-${p.status}">${p.status === 'live' ? 'Live' : p.status === 'beta' ? 'Beta' : 'WIP'}</span>
