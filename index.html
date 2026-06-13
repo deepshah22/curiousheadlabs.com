@@ -644,18 +644,11 @@ nav {
 
   <div class="contact-grid">
     <div class="contact-left">
-      <a class="contact-link-row" href="mailto:hello@curiousheadlabs.com">
+      <a class="contact-link-row" href="mailto:curiousheadlabs@gmail.com">
         <div class="cl-icon"><i class="ti ti-mail" style="color:#7F77DD"></i></div>
         <div>
           <div class="cl-label">Email</div>
-          <div class="cl-value">hello@curiousheadlabs.com</div>
-        </div>
-      </a>
-      <a class="contact-link-row" href="https://github.com/curiousheadlabs" target="_blank">
-        <div class="cl-icon"><i class="ti ti-brand-github" style="color:#7F77DD"></i></div>
-        <div>
-          <div class="cl-label">GitHub</div>
-          <div class="cl-value">github.com/curiousheadlabs</div>
+          <div class="cl-value">curiousheadlabs@gmail.com</div>
         </div>
       </a>
       <a class="contact-link-row" href="https://twitter.com/curiousheadlabs" target="_blank">
@@ -677,7 +670,7 @@ nav {
         <div class="avail-status"><span class="avail-dot"></span> Currently available for new projects</div>
         <div class="avail-note">Typical response time is under 24 hours. For urgent work, mention it in the subject line.</div>
         <div class="tz-row">
-          <div class="tz-cell"><div class="tz-lbl">Timezone</div><div class="tz-val">UTC+0 / GMT</div></div>
+          <div class="tz-cell"><div class="tz-lbl">Timezone</div><div class="tz-val">UTC-8 / PST</div></div>
           <div class="tz-cell"><div class="tz-lbl">Works with</div><div class="tz-val">All timezones</div></div>
         </div>
       </div>
@@ -870,7 +863,11 @@ document.addEventListener('click', e => {
 function submitForm() {
   const name = document.getElementById('f-name').value.trim();
   const email = document.getElementById('f-email').value.trim();
+  const subject = document.getElementById('f-subject').value.trim();
+  const msg = document.getElementById('f-msg').value.trim();
   if (!name || !email) { alert('Please fill in your name and email.'); return; }
+  const body = `Name: ${name}\nEmail: ${email}\n\n${msg}`;
+  window.location.href = `mailto:curiousheadlabs@gmail.com?subject=${encodeURIComponent(subject || 'Inquiry from curiousheadlabs.com')}&body=${encodeURIComponent(body)}`;
   document.getElementById('contact-form-wrap').style.display = 'none';
   document.getElementById('form-sent').style.display = 'block';
 }
