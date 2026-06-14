@@ -34,7 +34,6 @@
   }
 }
 
-html, body { height: 100%; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--tx); line-height: 1.6; }
 
 /* ── NAV ── */
@@ -94,7 +93,16 @@ nav {
 /* ── DASHBOARD ── */
 #view-dashboard { padding: 2rem 2.5rem 5rem; }
 
-.dash-greeting { margin-bottom: 2.25rem; max-width: 560px; }
+.dash-main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+@media (max-width: 960px) { .dash-main { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .dash-main { grid-template-columns: 1fr; } }
+
+.dash-greeting { margin-bottom: 2rem; max-width: 560px; }
 .dash-time { font-size: 12px; color: var(--tx3); font-weight: 500; margin-bottom: 4px; }
 .dash-h { font-size: 24px; font-weight: 600; letter-spacing: -0.6px; margin-bottom: 6px; }
 .dash-sub { font-size: 14px; color: var(--tx2); line-height: 1.7; }
@@ -121,15 +129,12 @@ nav {
 }
 .sec-more:hover { color: var(--a); }
 
-/* Knowledge Cards — 3-column */
+/* Knowledge Cards — single column */
 .k-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex; flex-direction: column;
   gap: 1px; background: var(--br);
   border: 0.5px solid var(--br); border-radius: var(--rl); overflow: hidden;
 }
-@media (max-width: 860px) { .k-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 540px) { .k-grid { grid-template-columns: 1fr; } }
 
 .k-card {
   background: var(--bg); padding: 1.25rem;
@@ -167,12 +172,12 @@ nav {
 .k-btn.primary:hover { opacity: .86; }
 .k-btn i { font-size: 12px; }
 
-/* Actions — responsive 2-col */
+/* Actions — single column list */
 .actions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 1px; background: var(--br);
+  display: flex; flex-direction: column;
+  background: var(--br);
   border: 0.5px solid var(--br); border-radius: var(--rl); overflow: hidden;
+  gap: 1px;
 }
 .action-item {
   background: var(--bg); padding: 0.9rem 1.1rem;
@@ -198,10 +203,9 @@ nav {
 .pri-lo  { background: var(--bg2); color: var(--tx3); border: 0.5px solid var(--br); }
 @media (prefers-color-scheme: dark) { .pri-hi { background: #2A1010; color: #F87171; } }
 
-/* Connections — responsive 4-col */
+/* Connections — single column */
 .conn-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  display: flex; flex-direction: column;
   gap: 1px; background: var(--br);
   border: 0.5px solid var(--br); border-radius: var(--rl); overflow: hidden;
 }
@@ -418,147 +422,158 @@ nav {
       </span>
     </div>
 
-    <!-- Knowledge Session -->
-    <div class="dash-section">
-      <div class="sec-head">
-        <div class="sec-title"><i class="ti ti-book-2"></i> Today's Knowledge Session</div>
-        <button class="sec-more">See all</button>
-      </div>
-      <div class="k-grid">
+    <div class="dash-main">
 
-        <div class="k-card">
-          <div class="k-card-top">
-            <span class="k-src"><i class="ti ti-brand-google-drive"></i> Google Drive</span>
-            <span class="k-age">8 months ago</span>
+      <!-- Column 1: Knowledge Session -->
+      <div>
+        <div class="dash-section">
+          <div class="sec-head">
+            <div class="sec-title"><i class="ti ti-book-2"></i> Today's Knowledge Session</div>
+            <button class="sec-more">See all</button>
           </div>
-          <div class="k-title">Distributed Systems: CAP Theorem &amp; Practical Tradeoffs</div>
-          <div class="k-excerpt">You wrote 4 pages exploring consistency vs. availability tradeoffs, with annotations on the payment service refactor.</div>
-          <div class="k-why"><strong>Why today:</strong> You're building a new API layer. The section on eventual consistency for async operations applies directly.</div>
-          <div class="k-actions">
-            <button class="k-btn primary"><i class="ti ti-eye"></i> Review</button>
-            <button class="k-btn"><i class="ti ti-link"></i> Connect</button>
+          <div class="k-grid">
+
+            <div class="k-card">
+              <div class="k-card-top">
+                <span class="k-src"><i class="ti ti-brand-google-drive"></i> Google Drive</span>
+                <span class="k-age">8 months ago</span>
+              </div>
+              <div class="k-title">Distributed Systems: CAP Theorem &amp; Practical Tradeoffs</div>
+              <div class="k-excerpt">You wrote 4 pages exploring consistency vs. availability tradeoffs, with annotations on the payment service refactor.</div>
+              <div class="k-why"><strong>Why today:</strong> You're building a new API layer. The section on eventual consistency for async operations applies directly.</div>
+              <div class="k-actions">
+                <button class="k-btn primary"><i class="ti ti-eye"></i> Review</button>
+                <button class="k-btn"><i class="ti ti-link"></i> Connect</button>
+              </div>
+            </div>
+
+            <div class="k-card">
+              <div class="k-card-top">
+                <span class="k-src"><i class="ti ti-notebook"></i> Journal</span>
+                <span class="k-age">14 months ago</span>
+              </div>
+              <div class="k-title">Startup idea: AI-powered meeting intelligence</div>
+              <div class="k-excerpt">What if AI didn't just transcribe meetings but extracted actual decisions, reasoning, and who owns what?</div>
+              <div class="k-why"><strong>Why today:</strong> This idea appears in 4 separate journals. The AI ecosystem is now mature enough — you have the skills to execute.</div>
+              <div class="k-actions">
+                <button class="k-btn primary"><i class="ti ti-rocket"></i> Explore</button>
+                <button class="k-btn"><i class="ti ti-archive"></i> Archive</button>
+              </div>
+            </div>
+
+            <div class="k-card">
+              <div class="k-card-top">
+                <span class="k-src"><i class="ti ti-bookmark"></i> Saved article</span>
+                <span class="k-age">6 months ago</span>
+              </div>
+              <div class="k-title">The Science of Deep Work — Cal Newport</div>
+              <div class="k-excerpt">Saved with annotations on implementing 3-hour focus blocks and protecting mornings from shallow work.</div>
+              <div class="k-why"><strong>Why today:</strong> You set a goal to implement deep work blocks in December. You haven't revisited it in 4 months.</div>
+              <div class="k-actions">
+                <button class="k-btn primary"><i class="ti ti-external-link"></i> Read</button>
+                <button class="k-btn"><i class="ti ti-target"></i> Revisit goal</button>
+              </div>
+            </div>
+
           </div>
         </div>
-
-        <div class="k-card">
-          <div class="k-card-top">
-            <span class="k-src"><i class="ti ti-notebook"></i> Journal</span>
-            <span class="k-age">14 months ago</span>
-          </div>
-          <div class="k-title">Startup idea: AI-powered meeting intelligence</div>
-          <div class="k-excerpt">What if AI didn't just transcribe meetings but extracted actual decisions, reasoning, and who owns what?</div>
-          <div class="k-why"><strong>Why today:</strong> This idea appears in 4 separate journals. The AI ecosystem is now mature enough — you have the skills to execute.</div>
-          <div class="k-actions">
-            <button class="k-btn primary"><i class="ti ti-rocket"></i> Explore</button>
-            <button class="k-btn"><i class="ti ti-archive"></i> Archive</button>
-          </div>
-        </div>
-
-        <div class="k-card">
-          <div class="k-card-top">
-            <span class="k-src"><i class="ti ti-bookmark"></i> Saved article</span>
-            <span class="k-age">6 months ago</span>
-          </div>
-          <div class="k-title">The Science of Deep Work — Cal Newport</div>
-          <div class="k-excerpt">Saved with annotations on implementing 3-hour focus blocks and protecting mornings from shallow work.</div>
-          <div class="k-why"><strong>Why today:</strong> You set a goal to implement deep work blocks in December. You haven't revisited it in 4 months.</div>
-          <div class="k-actions">
-            <button class="k-btn primary"><i class="ti ti-external-link"></i> Read</button>
-            <button class="k-btn"><i class="ti ti-target"></i> Revisit goal</button>
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <!-- Actions -->
-    <div class="dash-section">
-      <div class="sec-head">
-        <div class="sec-title"><i class="ti ti-checklist"></i> Today's Actions</div>
-        <button class="sec-more">5 items</button>
-      </div>
-      <div class="actions-grid">
-        <div class="action-item" onclick="toggleDone(this)">
-          <div class="action-check"></div>
-          <div class="action-body">
-            <div class="action-title">Reply to Sarah about the architecture proposal</div>
-            <div class="action-meta">
-              <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 3 days ago</span>
-              <span class="action-pri pri-hi">High</span>
+      <!-- Column 2: Actions -->
+      <div>
+        <div class="dash-section">
+          <div class="sec-head">
+            <div class="sec-title"><i class="ti ti-checklist"></i> Today's Actions</div>
+            <button class="sec-more">5 items</button>
+          </div>
+          <div class="actions-grid">
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Reply to Sarah about the architecture proposal</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 3 days ago</span>
+                  <span class="action-pri pri-hi">High</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Review auth service PR — team is blocked</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 1 day ago</span>
+                  <span class="action-pri pri-hi">High</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Follow up on the freelance contract from November</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-notebook" style="font-size:11px;vertical-align:-1px"></i> Journal &middot; 6 months ago</span>
+                  <span class="action-pri pri-med">Med</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Schedule the quarterly review you planned</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-brand-google-drive" style="font-size:11px;vertical-align:-1px"></i> Drive &middot; 3 months ago</span>
+                  <span class="action-pri pri-med">Med</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Read 2 bookmarked articles on Rust async</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-bookmark" style="font-size:11px;vertical-align:-1px"></i> Bookmarks &middot; 2 months ago</span>
+                  <span class="action-pri pri-lo">Low</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="action-item" onclick="toggleDone(this)">
-          <div class="action-check"></div>
-          <div class="action-body">
-            <div class="action-title">Review auth service PR — team is blocked</div>
-            <div class="action-meta">
-              <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 1 day ago</span>
-              <span class="action-pri pri-hi">High</span>
-            </div>
-          </div>
-        </div>
-        <div class="action-item" onclick="toggleDone(this)">
-          <div class="action-check"></div>
-          <div class="action-body">
-            <div class="action-title">Follow up on the freelance contract from November</div>
-            <div class="action-meta">
-              <span class="action-src"><i class="ti ti-notebook" style="font-size:11px;vertical-align:-1px"></i> Journal &middot; 6 months ago</span>
-              <span class="action-pri pri-med">Med</span>
-            </div>
-          </div>
-        </div>
-        <div class="action-item" onclick="toggleDone(this)">
-          <div class="action-check"></div>
-          <div class="action-body">
-            <div class="action-title">Schedule the quarterly review you planned</div>
-            <div class="action-meta">
-              <span class="action-src"><i class="ti ti-brand-google-drive" style="font-size:11px;vertical-align:-1px"></i> Drive &middot; 3 months ago</span>
-              <span class="action-pri pri-med">Med</span>
-            </div>
-          </div>
-        </div>
-        <div class="action-item" onclick="toggleDone(this)">
-          <div class="action-check"></div>
-          <div class="action-body">
-            <div class="action-title">Read 2 bookmarked articles on Rust async</div>
-            <div class="action-meta">
-              <span class="action-src"><i class="ti ti-bookmark" style="font-size:11px;vertical-align:-1px"></i> Bookmarks &middot; 2 months ago</span>
-              <span class="action-pri pri-lo">Low</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Connections -->
-    <div class="dash-section">
-      <div class="sec-head">
-        <div class="sec-title"><i class="ti ti-network"></i> Knowledge Connections</div>
-        <button class="sec-more">View map</button>
       </div>
-      <div class="conn-grid">
-        <div class="conn-card">
-          <div class="conn-top"><div class="conn-icon"><i class="ti ti-repeat"></i></div><span class="conn-type">Recurring theme</span></div>
-          <div class="conn-text">"You've mentioned distributed systems in 7 notes over the past 2 years."</div>
-          <div class="conn-sub">Notes &middot; Drive &middot; Gmail &middot; 3 clusters found</div>
-        </div>
-        <div class="conn-card">
-          <div class="conn-top"><div class="conn-icon"><i class="ti ti-bulb"></i></div><span class="conn-type">Idea pattern</span></div>
-          <div class="conn-text">"Your meeting intelligence idea appears across 4 separate journals."</div>
-          <div class="conn-sub">First mentioned Jan 2023 &middot; Growing frequency</div>
-        </div>
-        <div class="conn-card">
-          <div class="conn-top"><div class="conn-icon"><i class="ti ti-clock-pause"></i></div><span class="conn-type">Abandoned goal</span></div>
-          <div class="conn-text">"You set a goal to exercise 5&times; per week in December. Last mention was 4 months ago."</div>
-          <div class="conn-sub">Goal &middot; Journal &middot; 0 follow-ups detected</div>
-        </div>
-        <div class="conn-card">
-          <div class="conn-top"><div class="conn-icon"><i class="ti ti-books"></i></div><span class="conn-type">Reading debt</span></div>
-          <div class="conn-text">"You've saved 23 articles on machine learning. Fewer than 5 have reading notes."</div>
-          <div class="conn-sub">Bookmarks &middot; 23 items &middot; ~8 hrs estimated</div>
+
+      <!-- Column 3: Knowledge Connections -->
+      <div>
+        <div class="dash-section">
+          <div class="sec-head">
+            <div class="sec-title"><i class="ti ti-network"></i> Knowledge Connections</div>
+            <button class="sec-more">View map</button>
+          </div>
+          <div class="conn-grid">
+            <div class="conn-card">
+              <div class="conn-top"><div class="conn-icon"><i class="ti ti-repeat"></i></div><span class="conn-type">Recurring theme</span></div>
+              <div class="conn-text">"You've mentioned distributed systems in 7 notes over the past 2 years."</div>
+              <div class="conn-sub">Notes &middot; Drive &middot; Gmail &middot; 3 clusters found</div>
+            </div>
+            <div class="conn-card">
+              <div class="conn-top"><div class="conn-icon"><i class="ti ti-bulb"></i></div><span class="conn-type">Idea pattern</span></div>
+              <div class="conn-text">"Your meeting intelligence idea appears across 4 separate journals."</div>
+              <div class="conn-sub">First mentioned Jan 2023 &middot; Growing frequency</div>
+            </div>
+            <div class="conn-card">
+              <div class="conn-top"><div class="conn-icon"><i class="ti ti-clock-pause"></i></div><span class="conn-type">Abandoned goal</span></div>
+              <div class="conn-text">"You set a goal to exercise 5&times; per week in December. Last mention was 4 months ago."</div>
+              <div class="conn-sub">Goal &middot; Journal &middot; 0 follow-ups detected</div>
+            </div>
+            <div class="conn-card">
+              <div class="conn-top"><div class="conn-icon"><i class="ti ti-books"></i></div><span class="conn-type">Reading debt</span></div>
+              <div class="conn-text">"You've saved 23 articles on machine learning. Fewer than 5 have reading notes."</div>
+              <div class="conn-sub">Bookmarks &middot; 23 items &middot; ~8 hrs estimated</div>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
 
   </div>
