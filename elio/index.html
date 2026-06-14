@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elio — Personal Knowledge Archaeologist</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --a:  #B07540;
+  --al: #FAF0E4;
+  --ad: #7A4E24;
+  --bg:  #fafaf9;
+  --bg2: #f2f1ee;
+  --tx:  #111110;
+  --tx2: #6f6e6b;
+  --tx3: #b0afa9;
+  --br:  rgba(0,0,0,0.08);
+  --br2: rgba(0,0,0,0.14);
+  --r:   6px;
+  --rl:  10px;
+  --nav: 56px;
+  --sb:  210px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:  #111110;
+    --bg2: #1c1c1b;
+    --tx:  #f0efec;
+    --tx2: #908e87;
+    --tx3: #4e4d4a;
+    --br:  rgba(255,255,255,0.07);
+    --br2: rgba(255,255,255,0.13);
+    --al:  #261A0A;
+    --ad:  #D4955A;
+  }
+}
+
+html, body { height: 100%; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--tx); line-height: 1.6; }
+
+/* ── NAV ── */
+nav {
+  height: var(--nav);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem;
+  border-bottom: 0.5px solid var(--br);
+  position: sticky; top: 0;
+  background: var(--bg); z-index: 100;
+}
+.nav-left { display: flex; align-items: center; gap: 10px; }
+.back-link {
+  font-size: 13px; color: var(--tx3); text-decoration: none;
+  display: flex; align-items: center; gap: 4px;
+  padding: 5px 8px; border-radius: var(--r);
+  transition: color .15s;
+}
+.back-link:hover { color: var(--tx2); }
+.nav-sep { color: var(--tx3); font-size: 16px; font-weight: 300; }
+.elio-brand { display: flex; align-items: center; gap: 7px; }
+.elio-mark {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: var(--a);
+  display: flex; align-items: center; justify-content: center;
+}
+.elio-wordmark { font-size: 15px; font-weight: 600; letter-spacing: -0.4px; color: var(--tx); }
+.nav-tagline {
+  font-size: 12px; color: var(--tx3);
+  border-left: 1px solid var(--br2);
+  padding-left: 10px; margin-left: 2px;
+  display: none;
+}
+@media (min-width: 560px) { .nav-tagline { display: block; } }
+
+/* ── SHELL ── */
+.shell {
+  display: flex;
+  height: calc(100vh - var(--nav));
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sb); flex-shrink: 0;
+  border-right: 0.5px solid var(--br);
+  display: flex; flex-direction: column;
+  padding: 1rem 0.625rem;
+  gap: 2px;
+  overflow-y: auto;
+}
+.sb-section-lbl {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--tx3);
+  padding: 0 0.5rem;
+  margin-top: 0.75rem; margin-bottom: 2px;
+}
+.sb-btn {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: var(--r);
+  border: none; background: transparent;
+  font-family: inherit; font-size: 14px; color: var(--tx2);
+  cursor: pointer; transition: background .15s, color .15s;
+  text-align: left; white-space: nowrap; width: 100%;
+}
+.sb-btn:hover { background: var(--bg2); color: var(--tx); }
+.sb-btn.active { background: var(--al); color: var(--ad); font-weight: 500; }
+.sb-btn i { font-size: 17px; flex-shrink: 0; }
+.sb-spacer { flex: 1; min-height: 1rem; }
+.sb-sources {
+  border-top: 0.5px solid var(--br);
+  padding: 0.875rem 0.5rem 0;
+}
+.sb-sources-lbl { font-size: 11px; color: var(--tx3); font-weight: 500; margin-bottom: 0.5rem; }
+.src-row {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--tx3);
+  padding: 4px 0; justify-content: space-between;
+}
+.src-row i { font-size: 14px; }
+.src-dot { width: 5px; height: 5px; border-radius: 50%; background: #5CB85C; flex-shrink: 0; }
+.connect-btn {
+  width: 100%; margin-top: 0.75rem;
+  padding: 7px; border: 0.5px dashed var(--br2);
+  border-radius: var(--r); background: transparent;
+  font-size: 12px; color: var(--tx3); cursor: pointer;
+  font-family: inherit; transition: border-color .15s, color .15s;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.connect-btn:hover { border-color: var(--a); color: var(--a); }
+
+@media (max-width: 640px) {
+  .shell { flex-direction: column-reverse; }
+  .sidebar {
+    width: 100%; height: 56px; flex-shrink: 0;
+    flex-direction: row; align-items: center; justify-content: center;
+    border-right: none; border-top: 0.5px solid var(--br);
+    padding: 0 0.5rem; gap: 4px;
+    overflow-x: auto; overflow-y: hidden;
+  }
+  .sb-section-lbl, .sb-spacer, .sb-sources { display: none; }
+  .sb-btn { flex-direction: column; gap: 2px; padding: 5px 14px; font-size: 11px; white-space: nowrap; }
+  .sb-btn i { font-size: 18px; }
+}
+
+/* ── MAIN ── */
+.main-content { flex: 1; min-width: 0; overflow: hidden; display: flex; flex-direction: column; }
+
+/* ── VIEWS ── */
+.view { display: none; height: 100%; }
+.view.active { display: block; overflow-y: auto; }
+#view-chat { height: 100%; }
+#view-chat.active { display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── DASHBOARD ── */
+#view-dashboard { padding: 1.75rem 2rem 4rem; max-width: 920px; }
+
+.dash-greeting { margin-bottom: 1.75rem; }
+.dash-time { font-size: 12px; color: var(--tx3); font-weight: 500; margin-bottom: 4px; }
+.dash-h { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 5px; }
+.dash-sub { font-size: 14px; color: var(--tx2); line-height: 1.65; }
+.dash-sub strong { color: var(--tx); }
+.session-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--tx3);
+  background: var(--bg2); border: 0.5px solid var(--br);
+  border-radius: 20px; padding: 3px 10px; margin-top: 8px;
+}
+.session-badge i { font-size: 13px; color: var(--a); }
+
+.dash-cols {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 800px) { .dash-cols { grid-template-columns: 1fr; } }
+
+.sec-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.875rem;
+}
+.sec-title {
+  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+.sec-title i { font-size: 15px; color: var(--a); }
+.sec-more {
+  font-size: 12px; color: var(--tx3); cursor: pointer;
+  background: none; border: none; font-family: inherit;
+  padding: 0; transition: color .15s;
+}
+.sec-more:hover { color: var(--a); }
+
+/* Knowledge Cards */
+.k-cards {
+  display: flex; flex-direction: column; gap: 1px;
+  background: var(--br); border: 0.5px solid var(--br);
+  border-radius: var(--rl); overflow: hidden;
+}
+.k-card {
+  background: var(--bg);
+  padding: 1.1rem 1.25rem;
+  cursor: pointer; transition: background .15s;
+}
+.k-card:hover { background: var(--bg2); }
+.k-card-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.k-src {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--tx3); font-weight: 500;
+}
+.k-src i { font-size: 13px; }
+.k-age { font-size: 11px; color: var(--tx3); }
+.k-title { font-size: 14px; font-weight: 600; margin-bottom: 0.3rem; line-height: 1.4; }
+.k-excerpt {
+  font-size: 13px; color: var(--tx2); line-height: 1.65;
+  margin-bottom: 0.65rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.k-why {
+  background: var(--al); border-left: 2.5px solid var(--a);
+  border-radius: 0 4px 4px 0; padding: 6px 10px;
+  font-size: 12px; color: var(--tx2); line-height: 1.6;
+  margin-bottom: 0.65rem;
+}
+.k-why strong { color: var(--tx); }
+.k-actions { display: flex; gap: 6px; }
+.k-btn {
+  padding: 5px 11px; border-radius: var(--r);
+  border: 0.5px solid var(--br2); background: var(--bg);
+  font-size: 12px; font-weight: 500; color: var(--tx2);
+  cursor: pointer; font-family: inherit;
+  transition: border-color .15s, color .15s;
+  display: flex; align-items: center; gap: 4px;
+}
+.k-btn:hover { border-color: var(--a); color: var(--a); }
+.k-btn.primary { background: var(--a); color: #fff; border-color: var(--a); }
+.k-btn.primary:hover { opacity: .86; }
+.k-btn i { font-size: 12px; }
+
+/* Action Items */
+.actions-panel {
+  border: 0.5px solid var(--br); border-radius: var(--rl);
+  overflow: hidden; margin-bottom: 1.25rem;
+}
+.action-item {
+  padding: 0.8rem 1rem; display: flex; align-items: flex-start; gap: 0.75rem;
+  border-bottom: 0.5px solid var(--br); cursor: pointer;
+  transition: background .15s;
+}
+.action-item:last-child { border-bottom: none; }
+.action-item:hover { background: var(--bg2); }
+.action-item.done { opacity: .45; }
+.action-item.done .action-check { background: var(--a); border-color: var(--a); }
+.action-check {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1.5px solid var(--br2); flex-shrink: 0;
+  margin-top: 2px; transition: border-color .15s, background .15s;
+}
+.action-item:hover .action-check { border-color: var(--a); }
+.action-body { flex: 1; min-width: 0; }
+.action-title { font-size: 13px; font-weight: 500; line-height: 1.4; }
+.action-meta { display: flex; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: wrap; }
+.action-src { font-size: 11px; color: var(--tx3); }
+.action-pri {
+  font-size: 10px; font-weight: 600;
+  padding: 1px 6px; border-radius: 20px; letter-spacing: .2px;
+}
+.pri-hi  { background: #FEE8E7; color: #C53030; }
+.pri-med { background: var(--al); color: var(--ad); }
+.pri-lo  { background: var(--bg2); color: var(--tx3); border: 0.5px solid var(--br); }
+@media (prefers-color-scheme: dark) {
+  .pri-hi { background: #2A1010; color: #F87171; }
+}
+
+/* Connections */
+.connections { margin-top: 1.5rem; }
+.conn-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: var(--br);
+  border: 0.5px solid var(--br); border-radius: var(--rl); overflow: hidden;
+}
+@media (max-width: 560px) { .conn-grid { grid-template-columns: 1fr; } }
+.conn-card {
+  background: var(--bg); padding: 1rem 1.1rem;
+  cursor: pointer; transition: background .15s;
+}
+.conn-card:hover { background: var(--bg2); }
+.conn-top { display: flex; align-items: center; gap: 7px; margin-bottom: 0.5rem; }
+.conn-icon {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: var(--al); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.conn-icon i { font-size: 13px; color: var(--a); }
+.conn-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--tx3); }
+.conn-text {
+  font-size: 13px; color: var(--tx); line-height: 1.55;
+  font-family: 'Lora', Georgia, serif; font-style: italic;
+}
+.conn-sub { font-size: 11px; color: var(--tx3); margin-top: 5px; }
+
+/* ── CHAT VIEW ── */
+.chat-header {
+  padding: 1.1rem 1.75rem; border-bottom: 0.5px solid var(--br); flex-shrink: 0;
+}
+.chat-header-title { font-size: 14px; font-weight: 600; }
+.chat-header-sub { font-size: 12px; color: var(--tx3); margin-top: 2px; }
+.chat-messages {
+  flex: 1; overflow-y: auto;
+  padding: 1.5rem 1.75rem;
+  display: flex; flex-direction: column; gap: 1.25rem;
+}
+.chat-msg { display: flex; gap: 10px; align-items: flex-start; }
+.chat-msg.user { align-self: flex-end; flex-direction: row-reverse; max-width: 520px; }
+.chat-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.chat-av.elio { background: var(--a); color: #fff; font-size: 13px; }
+.chat-av.user {
+  background: var(--bg2); color: var(--tx2);
+  border: 0.5px solid var(--br); font-size: 13px;
+}
+.chat-bubble {
+  background: var(--bg2); border: 0.5px solid var(--br);
+  border-radius: 12px 12px 12px 3px;
+  padding: 0.75rem 1rem;
+  font-size: 14px; line-height: 1.7; color: var(--tx);
+  max-width: 520px;
+}
+.chat-msg.user .chat-bubble {
+  background: var(--al); border-color: rgba(176,117,64,0.25);
+  border-radius: 12px 12px 3px 12px;
+}
+.chat-bubble p { margin-bottom: 0.5rem; }
+.chat-bubble p:last-child { margin-bottom: 0; }
+.chat-bubble ol, .chat-bubble ul { padding-left: 1.4rem; }
+.chat-bubble li { margin-bottom: 0.3rem; }
+.cite {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: var(--bg); border: 0.5px solid var(--br2);
+  border-radius: 4px; font-size: 11px; padding: 1px 6px;
+  color: var(--tx3); margin: 0 2px; vertical-align: middle;
+}
+.chat-thinking {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--tx3); font-style: italic;
+}
+.chat-dots span {
+  display: inline-block; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--tx3);
+  animation: dot 1.4s ease-in-out infinite;
+}
+.chat-dots span:nth-child(2) { animation-delay: .2s; }
+.chat-dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes dot { 0%,80%,100%{transform:scale(0);opacity:.3} 40%{transform:scale(1);opacity:1} }
+
+.chat-suggestions {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  padding: 0 1.75rem 0.75rem; flex-shrink: 0;
+}
+.sugg {
+  padding: 6px 14px; border-radius: 20px;
+  border: 0.5px solid var(--br2); background: var(--bg);
+  font-size: 12px; color: var(--tx2); cursor: pointer;
+  font-family: inherit; transition: border-color .15s, color .15s; white-space: nowrap;
+}
+.sugg:hover { border-color: var(--a); color: var(--a); }
+
+.chat-input-row {
+  display: flex; align-items: flex-end; gap: 8px;
+  padding: 0.75rem 1.75rem 1.25rem;
+  border-top: 0.5px solid var(--br); flex-shrink: 0;
+}
+.chat-input {
+  flex: 1; padding: 10px 14px;
+  border: 0.5px solid var(--br2); border-radius: 22px;
+  background: var(--bg2); font-family: inherit;
+  font-size: 14px; color: var(--tx); outline: none;
+  resize: none; transition: border-color .15s;
+  line-height: 1.5; max-height: 120px; overflow-y: auto;
+}
+.chat-input:focus { border-color: var(--a); }
+.chat-input::placeholder { color: var(--tx3); }
+.chat-send {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--a); border: none; cursor: pointer;
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  transition: opacity .15s; flex-shrink: 0;
+}
+.chat-send:hover { opacity: .85; }
+.chat-send i { font-size: 16px; }
+
+@media (max-width: 640px) {
+  .chat-messages { padding: 1rem; }
+  .chat-input-row { padding: 0.75rem 1rem 1rem; }
+  .chat-suggestions { padding: 0 1rem 0.75rem; }
+  .chat-header { padding: 0.875rem 1rem; }
+}
+
+/* ── FEED VIEW ── */
+#view-feed { padding: 1.75rem 2rem 4rem; max-width: 660px; }
+.feed-hd { margin-bottom: 1.5rem; }
+.feed-hd-title { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
+.feed-hd-sub { font-size: 13px; color: var(--tx2); }
+.feed-stream {
+  display: flex; flex-direction: column; gap: 1px;
+  background: var(--br); border: 0.5px solid var(--br);
+  border-radius: var(--rl); overflow: hidden;
+}
+.feed-card {
+  background: var(--bg); padding: 1.1rem 1.25rem;
+  cursor: pointer; transition: background .15s;
+}
+.feed-card:hover { background: var(--bg2); }
+.feed-card-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+.feed-type {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+}
+.feed-type i { font-size: 11px; }
+.type-insight  { background: var(--al); color: var(--ad); }
+.type-connect  { background: #EEF0FB; color: #4A56A6; }
+.type-reminder { background: #FEF3CD; color: #7A5800; }
+.type-idea     { background: #EDFAF0; color: #1E7038; }
+@media (prefers-color-scheme: dark) {
+  .type-connect  { background: #1A1D30; color: #9EA8E8; }
+  .type-reminder { background: #221A00; color: #D4A82A; }
+  .type-idea     { background: #0E2215; color: #5DBE80; }
+}
+.feed-ts { font-size: 11px; color: var(--tx3); }
+.feed-card-title { font-size: 14px; font-weight: 600; margin-bottom: 0.3rem; line-height: 1.4; }
+.feed-card-body {
+  font-size: 13px; color: var(--tx2); line-height: 1.65;
+  font-family: 'Lora', Georgia, serif; font-style: italic;
+}
+.feed-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 0.65rem; }
+.feed-chip {
+  font-size: 11px; color: var(--tx3);
+  background: var(--bg2); border: 0.5px solid var(--br);
+  border-radius: 4px; padding: 1px 7px;
+}
+
+@media (max-width: 640px) {
+  #view-dashboard { padding: 1.25rem 1rem 4rem; }
+  #view-feed { padding: 1.25rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a class="back-link" href="../index.html">
+      <i class="ti ti-arrow-left" style="font-size:13px"></i> Lab
+    </a>
+    <span class="nav-sep" aria-hidden="true">/</span>
+    <div class="elio-brand">
+      <div class="elio-mark">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M2 4H14M2 8H11M2 12H7" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="elio-wordmark">Elio</span>
+    </div>
+    <span class="nav-tagline">Personal Knowledge Archaeologist</span>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <button class="sb-btn active" id="sb-dashboard" onclick="switchView('dashboard')">
+      <i class="ti ti-layout-dashboard"></i><span>Dashboard</span>
+    </button>
+    <button class="sb-btn" id="sb-chat" onclick="switchView('chat')">
+      <i class="ti ti-message-circle"></i><span>Ask Elio</span>
+    </button>
+    <button class="sb-btn" id="sb-feed" onclick="switchView('feed')">
+      <i class="ti ti-activity"></i><span>Feed</span>
+    </button>
+
+    <div class="sb-spacer"></div>
+
+    <div class="sb-sources">
+      <div class="sb-sources-lbl">Connected sources</div>
+      <div class="src-row"><span style="display:flex;align-items:center;gap:6px"><i class="ti ti-brand-google-drive"></i>Google Drive</span><span class="src-dot"></span></div>
+      <div class="src-row"><span style="display:flex;align-items:center;gap:6px"><i class="ti ti-mail"></i>Gmail</span><span class="src-dot"></span></div>
+      <div class="src-row"><span style="display:flex;align-items:center;gap:6px"><i class="ti ti-notebook"></i>Journals</span><span class="src-dot"></span></div>
+      <div class="src-row" style="color:var(--tx3);opacity:.55"><span style="display:flex;align-items:center;gap:6px"><i class="ti ti-brand-notion"></i>Notion</span></div>
+      <div class="src-row" style="color:var(--tx3);opacity:.55"><span style="display:flex;align-items:center;gap:6px"><i class="ti ti-bookmark"></i>Bookmarks</span></div>
+      <button class="connect-btn"><i class="ti ti-plug"></i> Connect more</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+
+      <div class="dash-greeting">
+        <div class="dash-time" id="dash-time"></div>
+        <div class="dash-h" id="dash-h">Good morning, Deep.</div>
+        <div class="dash-sub">I found <strong>3 things worth revisiting</strong> from your knowledge base and surfaced <strong>5 actions</strong> that need attention.</div>
+        <span class="session-badge">
+          <i class="ti ti-clock"></i> 30-min session &middot; Curated from 2,847 notes
+        </span>
+      </div>
+
+      <div class="dash-cols">
+
+        <div>
+          <div class="sec-head">
+            <div class="sec-title"><i class="ti ti-book-2"></i> Today's Knowledge Session</div>
+            <button class="sec-more">See all</button>
+          </div>
+          <div class="k-cards">
+
+            <div class="k-card">
+              <div class="k-card-top">
+                <span class="k-src"><i class="ti ti-brand-google-drive"></i> Google Drive</span>
+                <span class="k-age">8 months ago</span>
+              </div>
+              <div class="k-title">Distributed Systems: CAP Theorem &amp; Practical Tradeoffs</div>
+              <div class="k-excerpt">You wrote 4 pages exploring consistency vs. availability tradeoffs, with personal annotations on how it applies to your payment service refactor.</div>
+              <div class="k-why"><strong>Why today:</strong> You're building a new API layer. The section on eventual consistency for async operations applies directly.</div>
+              <div class="k-actions">
+                <button class="k-btn primary"><i class="ti ti-eye"></i> Review</button>
+                <button class="k-btn"><i class="ti ti-link"></i> Connect to project</button>
+              </div>
+            </div>
+
+            <div class="k-card">
+              <div class="k-card-top">
+                <span class="k-src"><i class="ti ti-notebook"></i> Journal</span>
+                <span class="k-age">14 months ago</span>
+              </div>
+              <div class="k-title">Startup idea: AI-powered meeting intelligence</div>
+              <div class="k-excerpt">Had an idea during a 2-hour all-hands. What if AI didn't just transcribe meetings but extracted actual decisions, reasoning, and who owns what?</div>
+              <div class="k-why"><strong>Why today:</strong> This idea appears in 4 separate journal entries. The AI ecosystem is now mature enough — you have the skills to execute.</div>
+              <div class="k-actions">
+                <button class="k-btn primary"><i class="ti ti-rocket"></i> Explore</button>
+                <button class="k-btn"><i class="ti ti-archive"></i> Archive</button>
+              </div>
+            </div>
+
+            <div class="k-card">
+              <div class="k-card-top">
+                <span class="k-src"><i class="ti ti-bookmark"></i> Saved article</span>
+                <span class="k-age">6 months ago</span>
+              </div>
+              <div class="k-title">The Science of Deep Work — Cal Newport</div>
+              <div class="k-excerpt">Saved with annotations on implementing 3-hour focus blocks, protecting mornings, and eliminating shallow work from your calendar.</div>
+              <div class="k-why"><strong>Why today:</strong> You set a goal to implement deep work blocks in December. You haven't revisited this goal in 4 months.</div>
+              <div class="k-actions">
+                <button class="k-btn primary"><i class="ti ti-external-link"></i> Read</button>
+                <button class="k-btn"><i class="ti ti-target"></i> Revisit goal</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-head">
+            <div class="sec-title"><i class="ti ti-checklist"></i> Today's Actions</div>
+            <button class="sec-more">5 items</button>
+          </div>
+          <div class="actions-panel">
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Reply to Sarah about the architecture proposal</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 3 days ago</span>
+                  <span class="action-pri pri-hi">High</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Review auth service PR — team is blocked</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 1 day ago</span>
+                  <span class="action-pri pri-hi">High</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Follow up on the freelance contract from November</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-notebook" style="font-size:11px;vertical-align:-1px"></i> Journal &middot; 6 months ago</span>
+                  <span class="action-pri pri-med">Med</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Schedule the quarterly review you planned</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-brand-google-drive" style="font-size:11px;vertical-align:-1px"></i> Drive &middot; 3 months ago</span>
+                  <span class="action-pri pri-med">Med</span>
+                </div>
+              </div>
+            </div>
+            <div class="action-item" onclick="toggleDone(this)">
+              <div class="action-check"></div>
+              <div class="action-body">
+                <div class="action-title">Read 2 bookmarked articles on Rust async</div>
+                <div class="action-meta">
+                  <span class="action-src"><i class="ti ti-bookmark" style="font-size:11px;vertical-align:-1px"></i> Bookmarks &middot; 2 months ago</span>
+                  <span class="action-pri pri-lo">Low</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="connections">
+        <div class="sec-head">
+          <div class="sec-title"><i class="ti ti-network"></i> Knowledge Connections</div>
+          <button class="sec-more">View map</button>
+        </div>
+        <div class="conn-grid">
+          <div class="conn-card">
+            <div class="conn-top">
+              <div class="conn-icon"><i class="ti ti-repeat"></i></div>
+              <span class="conn-type">Recurring theme</span>
+            </div>
+            <div class="conn-text">"You've mentioned distributed systems in 7 notes over the past 2 years."</div>
+            <div class="conn-sub">Notes &middot; Drive &middot; Gmail &middot; 3 clusters found</div>
+          </div>
+          <div class="conn-card">
+            <div class="conn-top">
+              <div class="conn-icon"><i class="ti ti-bulb"></i></div>
+              <span class="conn-type">Idea pattern</span>
+            </div>
+            <div class="conn-text">"Your meeting intelligence idea appears across 4 separate journals."</div>
+            <div class="conn-sub">First mentioned Jan 2023 &middot; Growing frequency</div>
+          </div>
+          <div class="conn-card">
+            <div class="conn-top">
+              <div class="conn-icon"><i class="ti ti-clock-pause"></i></div>
+              <span class="conn-type">Abandoned goal</span>
+            </div>
+            <div class="conn-text">"You set a goal to exercise 5&times; per week in December. Last mention was 4 months ago."</div>
+            <div class="conn-sub">Goal &middot; Journal &middot; 0 follow-ups detected</div>
+          </div>
+          <div class="conn-card">
+            <div class="conn-top">
+              <div class="conn-icon"><i class="ti ti-books"></i></div>
+              <span class="conn-type">Reading debt</span>
+            </div>
+            <div class="conn-text">"You've saved 23 articles on machine learning. Fewer than 5 have reading notes."</div>
+            <div class="conn-sub">Bookmarks &middot; 23 items &middot; ~8 hrs estimated</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CHAT -->
+    <div class="view" id="view-chat">
+      <div class="chat-header">
+        <div class="chat-header-title">Ask Elio</div>
+        <div class="chat-header-sub">Searching across 2,847 notes, emails, and journals</div>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+
+        <div class="chat-msg">
+          <div class="chat-av elio"><i class="ti ti-sparkles"></i></div>
+          <div class="chat-bubble">
+            <p>Hello, Deep. I've finished indexing your knowledge base. What would you like to explore today?</p>
+          </div>
+        </div>
+
+        <div class="chat-msg user">
+          <div class="chat-av user"><i class="ti ti-user"></i></div>
+          <div class="chat-bubble">What startup ideas have I mentioned before?</div>
+        </div>
+
+        <div class="chat-msg">
+          <div class="chat-av elio"><i class="ti ti-sparkles"></i></div>
+          <div class="chat-bubble">
+            <p>I found <strong>6 distinct startup ideas</strong> across your notes and journals, spanning 3 years:</p>
+            <ol>
+              <li><strong>AI meeting intelligence</strong> &mdash; <span class="cite"><i class="ti ti-notebook" style="font-size:10px"></i> 4 journal entries</span> First mentioned Jan 2023. Growing urgency in recent entries.</li>
+              <li><strong>Finance tracker for freelancers</strong> &mdash; <span class="cite"><i class="ti ti-brand-google-drive" style="font-size:10px"></i> 2 notes</span> You sketched a full feature list in Feb 2024 but went quiet after that.</li>
+              <li><strong>Developer onboarding tool</strong> &mdash; <span class="cite"><i class="ti ti-mail" style="font-size:10px"></i> 1 email thread</span> From a conversation about painful first-week experiences.</li>
+              <li><strong>Personal knowledge base (RAG)</strong> &mdash; <span class="cite"><i class="ti ti-notebook" style="font-size:10px"></i> 3 journal entries</span> Ironically, this is what Elio is. You had the idea 18 months ago.</li>
+              <li><strong>Async-first team docs tool</strong> &mdash; <span class="cite"><i class="ti ti-brand-google-drive" style="font-size:10px"></i> 1 note</span> Brief entry from a frustrating sprint planning session.</li>
+              <li><strong>CLI for PostgreSQL query analysis</strong> &mdash; <span class="cite"><i class="ti ti-brand-google-drive" style="font-size:10px"></i> 1 note</span> Technical sketch with sample commands.</li>
+            </ol>
+            <p>The meeting intelligence idea has the most emotional weight and appears most frequently. Want me to pull together everything you've written about it?</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="chat-suggestions">
+        <button class="sugg" onclick="sendSuggestion(this)">What goals have I ignored?</button>
+        <button class="sugg" onclick="sendSuggestion(this)">What should I focus on this week?</button>
+        <button class="sugg" onclick="sendSuggestion(this)">What do I know about RAG?</button>
+        <button class="sugg" onclick="sendSuggestion(this)">Summarize my AI notes</button>
+      </div>
+
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chat-input" placeholder="Ask about your knowledge base…" rows="1"
+          onkeydown="chatKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="chat-send" onclick="sendChat()"><i class="ti ti-send-2"></i></button>
+      </div>
+    </div>
+
+    <!-- FEED -->
+    <div class="view" id="view-feed">
+      <div class="feed-hd">
+        <div class="feed-hd-title">Knowledge Feed</div>
+        <div class="feed-hd-sub">Patterns, connections, and rediscoveries surfaced from your knowledge base.</div>
+      </div>
+      <div class="feed-stream">
+
+        <div class="feed-card">
+          <div class="feed-card-top">
+            <span class="feed-type type-insight"><i class="ti ti-sparkles"></i> Insight</span>
+            <span class="feed-ts">This morning</span>
+          </div>
+          <div class="feed-card-title">You've been consistently drawn to systems thinking for 3+ years</div>
+          <div class="feed-card-body">"Across 47 notes tagged with architecture, design, and systems, a clear intellectual throughline emerges: you're fascinated by how parts create emergent behaviors."</div>
+          <div class="feed-card-meta">
+            <span class="feed-chip">47 notes</span>
+            <span class="feed-chip">3 years of data</span>
+          </div>
+        </div>
+
+        <div class="feed-card">
+          <div class="feed-card-top">
+            <span class="feed-type type-connect"><i class="ti ti-arrows-join"></i> Connection</span>
+            <span class="feed-ts">Yesterday</span>
+          </div>
+          <div class="feed-card-title">Your notes on parenting + your AI interests may converge</div>
+          <div class="feed-card-body">"A note from 8 months ago about teaching your child critical thinking connects to 3 notes on AI tutoring systems. You might be drawn to building EdTech tools."</div>
+          <div class="feed-card-meta">
+            <span class="feed-chip">Cross-topic</span>
+            <span class="feed-chip">Journal + Drive</span>
+          </div>
+        </div>
+
+        <div class="feed-card">
+          <div class="feed-card-top">
+            <span class="feed-type type-reminder"><i class="ti ti-clock"></i> Reminder</span>
+            <span class="feed-ts">2 days ago</span>
+          </div>
+          <div class="feed-card-title">You planned to learn Rust by end of last year</div>
+          <div class="feed-card-body">"Goal set in October: 'Learn enough Rust to build a CLI tool.' You've saved 8 articles on async Rust but haven't written any code. The goal is 6 months overdue."</div>
+          <div class="feed-card-meta">
+            <span class="feed-chip">Goal &middot; Oct 2024</span>
+            <span class="feed-chip">8 articles saved</span>
+          </div>
+        </div>
+
+        <div class="feed-card">
+          <div class="feed-card-top">
+            <span class="feed-type type-idea"><i class="ti ti-bulb"></i> Idea</span>
+            <span class="feed-ts">3 days ago</span>
+          </div>
+          <div class="feed-card-title">A concept you've circled but never acted on: "documentation as code"</div>
+          <div class="feed-card-body">"You've described living documentation — docs that auto-update from code changes — in 5 separate notes over 2 years. You've never prototyped it."</div>
+          <div class="feed-card-meta">
+            <span class="feed-chip">5 mentions</span>
+            <span class="feed-chip">2 years</span>
+          </div>
+        </div>
+
+        <div class="feed-card">
+          <div class="feed-card-top">
+            <span class="feed-type type-insight"><i class="ti ti-sparkles"></i> Insight</span>
+            <span class="feed-ts">4 days ago</span>
+          </div>
+          <div class="feed-card-title">Your most productive writing happens on Sunday mornings</div>
+          <div class="feed-card-body">"Analysis of 340 journal entries by timestamp: 68% of your most detailed, reflective notes were written between 7–10am on Sundays. Your Sunday morning self is your best thinker."</div>
+          <div class="feed-card-meta">
+            <span class="feed-chip">340 journal entries</span>
+            <span class="feed-chip">Behavioral pattern</span>
+          </div>
+        </div>
+
+        <div class="feed-card">
+          <div class="feed-card-top">
+            <span class="feed-type type-connect"><i class="ti ti-arrows-join"></i> Connection</span>
+            <span class="feed-ts">5 days ago</span>
+          </div>
+          <div class="feed-card-title">Two problems you've written about have the same solution</div>
+          <div class="feed-card-body">"Your note on 'slow team onboarding' and your note on 'knowledge lost when engineers leave' both point toward structured knowledge graphs. You've arrived at the same answer twice."</div>
+          <div class="feed-card-meta">
+            <span class="feed-chip">2 notes &middot; 14 months apart</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* VIEW SWITCHING */
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.getElementById('sb-' + name).classList.add('active');
+}
+
+/* ACTION ITEM TOGGLE */
+function toggleDone(item) {
+  item.classList.toggle('done');
+}
+
+/* CHAT */
+const mockResponses = {
+  goals: "<p>I found <strong>8 goals</strong> you've set. Here are the ones with no recent follow-up:</p><ol><li><strong>Learn Rust</strong> — Set Oct 2024. No code written. 8 articles saved but unread.</li><li><strong>Exercise 5&times; per week</strong> — Set Dec 2024. Last mention 4 months ago.</li><li><strong>Read 24 books in 2025</strong> — Set Jan 2025. Currently at 4 based on reading notes.</li><li><strong>Launch a side project</strong> — Mentioned 6 times across 2024. No concrete steps recorded.</li></ol>",
+  focus: "<p>Based on your knowledge base and pending actions, here's what I'd prioritize this week:</p><ol><li><strong>Reply to Sarah</strong> — 3 days old, high-signal architecture email. Your team is waiting.</li><li><strong>Review the auth service PR</strong> — Blocking someone. Should take under 2 hours.</li><li><strong>Spend 30 mins with your distributed systems notes</strong> — Directly applicable to your current API work.</li></ol><p>Everything else can wait without real cost.</p>",
+  rag: "<p>You have <strong>14 notes and articles</strong> about RAG across your knowledge base:</p><ul><li>A technical overview you wrote after reading the original RAG paper (2023)</li><li>Notes comparing Pinecone, Weaviate, and pgvector</li><li>A half-written design doc for a RAG pipeline at work</li><li>6 bookmarked articles, 3 with reading annotations</li></ul><p>Interestingly, you had the idea for a personal RAG system — essentially Elio — 18 months before Elio existed.</p>",
+  ai: "<p>Your AI notes span <strong>3 years and 31 documents</strong>. Key clusters:</p><ul><li><strong>LLMs &amp; prompt engineering</strong> — 12 notes, heavy activity in 2024</li><li><strong>RAG systems</strong> — 6 notes, mostly technical</li><li><strong>AI product ideas</strong> — 8 notes, many overlapping startup ideas</li><li><strong>Ethics &amp; limitations</strong> — 5 notes, written thoughtfully over time</li></ul><p>You've shifted from theoretical interest (2022) toward practical building (2024–present).</p>",
+  _default: "<p>I'm searching through your notes, emails, and journals for relevant context.</p><p>In the full version, I'd retrieve the most relevant passages and synthesize a grounded answer with source citations. This is a frontend prototype — but the architecture behind it would use semantic search over your embedded knowledge base.</p>",
+};
+
+function getResponse(msg) {
+  const s = msg.toLowerCase();
+  if (s.includes('goal') || s.includes('ignor') || s.includes('abandon')) return mockResponses.goals;
+  if (s.includes('focus') || s.includes('week') || s.includes('prior')) return mockResponses.focus;
+  if (s.includes('rag') || s.includes('retriev')) return mockResponses.rag;
+  if (s.includes('ai') || s.includes('machine learn') || s.includes('summarize')) return mockResponses.ai;
+  return mockResponses._default;
+}
+
+function appendMsg(html, isUser) {
+  const msgs = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'chat-msg' + (isUser ? ' user' : '');
+  const av = isUser
+    ? '<div class="chat-av user"><i class="ti ti-user"></i></div>'
+    : '<div class="chat-av elio"><i class="ti ti-sparkles"></i></div>';
+  d.innerHTML = av + '<div class="chat-bubble">' + html + '</div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'chat-msg'; d.id = 'chat-typing';
+  d.innerHTML = '<div class="chat-av elio"><i class="ti ti-sparkles"></i></div>'
+    + '<div class="chat-thinking"><span class="chat-dots"><span></span><span></span><span></span></span> Searching your knowledge base…</div>';
+  msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = ''; autoResize(input);
+  appendMsg(text, true);
+  showTyping();
+  setTimeout(() => {
+    const t = document.getElementById('chat-typing');
+    if (t) t.remove();
+    appendMsg(getResponse(text), false);
+  }, 900 + Math.random() * 500);
+}
+
+function sendSuggestion(btn) {
+  const input = document.getElementById('chat-input');
+  input.value = btn.textContent;
+  switchView('chat');
+  setTimeout(() => { sendChat(); }, 50);
+}
+
+function chatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+/* GREETING */
+(function () {
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+  const period = h < 12 ? 'Morning' : h < 18 ? 'Afternoon' : 'Evening';
+  const d = new Date();
+  const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  const hEl = document.getElementById('dash-h');
+  const tEl = document.getElementById('dash-time');
+  if (hEl) hEl.textContent = greet + ', Deep.';
+  if (tEl) tEl.textContent = dateStr + ' · ' + period;
+})();
+</script>
+</body>
+</html>
