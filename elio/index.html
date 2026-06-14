@@ -362,10 +362,119 @@ nav {
 .feed-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 0.65rem; }
 .feed-chip { font-size: 11px; color: var(--tx3); background: var(--bg2); border: 0.5px solid var(--br); border-radius: 4px; padding: 1px 7px; }
 
+/* ── ABOUT VIEW ── */
+#view-about { padding: 3rem 2.5rem 6rem; max-width: 860px; }
+
+.about-hero { margin-bottom: 3.5rem; }
+.about-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--a);
+  margin-bottom: 1rem;
+}
+.about-h1 {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 38px; font-weight: 500; letter-spacing: -0.5px;
+  line-height: 1.2; color: var(--tx); margin-bottom: 1.25rem;
+  max-width: 620px;
+}
+.about-lead {
+  font-size: 16px; color: var(--tx2); line-height: 1.8;
+  max-width: 580px;
+}
+
+.about-divider { height: 0.5px; background: var(--br); margin: 3rem 0; }
+
+.about-section { margin-bottom: 3rem; }
+.about-section-title {
+  font-size: 13px; font-weight: 600; letter-spacing: -0.1px;
+  color: var(--tx3); text-transform: uppercase; font-size: 11px;
+  letter-spacing: 1px; margin-bottom: 1.25rem;
+}
+
+/* Problem section */
+.problem-list { display: flex; flex-direction: column; gap: 0; }
+.problem-item {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 0.9rem 0; border-bottom: 0.5px solid var(--br);
+}
+.problem-item:first-child { border-top: 0.5px solid var(--br); }
+.problem-num { font-size: 11px; color: var(--tx3); font-weight: 600; width: 20px; flex-shrink: 0; padding-top: 2px; }
+.problem-text { font-size: 14px; color: var(--tx2); line-height: 1.6; }
+.problem-text strong { color: var(--tx); font-weight: 600; }
+
+/* Feature grid */
+.feature-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--br);
+  border: 0.5px solid var(--br); border-radius: var(--rl); overflow: hidden;
+}
+@media (max-width: 760px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .feature-grid { grid-template-columns: 1fr; } }
+.feature-card {
+  background: var(--bg); padding: 1.25rem;
+}
+.feature-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--al); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 0.75rem;
+}
+.feature-icon i { font-size: 16px; color: var(--a); }
+.feature-title { font-size: 13px; font-weight: 600; margin-bottom: 0.35rem; }
+.feature-desc { font-size: 13px; color: var(--tx2); line-height: 1.6; }
+
+/* Architecture */
+.arch-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 600px) { .arch-grid { grid-template-columns: 1fr; } }
+.arch-card {
+  border: 0.5px solid var(--br); border-radius: var(--rl);
+  padding: 1.25rem; background: var(--bg2);
+}
+.arch-card-title {
+  font-size: 12px; font-weight: 600; color: var(--tx3);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 6px;
+}
+.arch-card-title i { font-size: 14px; color: var(--a); }
+.arch-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.arch-tag {
+  font-size: 12px; color: var(--tx2);
+  background: var(--bg); border: 0.5px solid var(--br2);
+  border-radius: 4px; padding: 2px 8px;
+}
+
+/* Design principles */
+.principles-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px; background: var(--br);
+  border: 0.5px solid var(--br); border-radius: var(--rl); overflow: hidden;
+}
+.principle-card { background: var(--bg); padding: 1.25rem 1.5rem; }
+.principle-word {
+  font-family: 'Lora', Georgia, serif; font-style: italic;
+  font-size: 18px; color: var(--a); margin-bottom: 4px;
+}
+.principle-desc { font-size: 12px; color: var(--tx3); line-height: 1.55; }
+
+/* Status banner */
+.about-status {
+  display: flex; align-items: flex-start; gap: 1rem;
+  background: var(--al); border: 0.5px solid rgba(176,117,64,0.3);
+  border-radius: var(--rl); padding: 1.25rem 1.5rem; margin-top: 3rem;
+}
+.about-status i { font-size: 18px; color: var(--a); flex-shrink: 0; margin-top: 1px; }
+.about-status-body {}
+.about-status-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.about-status-sub { font-size: 13px; color: var(--tx2); line-height: 1.6; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
   #view-dashboard { padding: 1.25rem 1rem 4rem; }
   #view-feed { padding: 1.25rem 1rem 3rem; }
+  #view-about { padding: 2rem 1rem 5rem; }
+  .about-h1 { font-size: 28px; }
   .chat-messages { padding: 1rem; }
   .chat-active-input { padding: 0.75rem 1rem 1rem; }
   .tab-bar { padding: 0 1rem; }
@@ -404,6 +513,9 @@ nav {
   </button>
   <button class="tab-btn" id="tab-feed" onclick="switchView('feed')">
     <i class="ti ti-activity"></i> Feed
+  </button>
+  <button class="tab-btn" id="tab-about" onclick="switchView('about')">
+    <i class="ti ti-info-circle"></i> About
   </button>
 </div>
 
@@ -684,6 +796,172 @@ nav {
       </div>
 
     </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="view" id="view-about">
+
+    <div class="about-hero">
+      <div class="about-eyebrow">Project overview</div>
+      <div class="about-h1">Your knowledge, rediscovered.</div>
+      <p class="about-lead">Elio is a personal knowledge archaeologist — an AI-powered system that continuously excavates, connects, and resurfaces the most valuable information from your digital life, delivered as a curated daily feed.</p>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <!-- The problem -->
+    <div class="about-section">
+      <div class="about-section-title">The problem</div>
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="problem-num">01</div>
+          <div class="problem-text"><strong>Knowledge accumulates faster than it can be used.</strong> Over years, people build up thousands of notes, saved articles, emails, journals, and ideas across a dozen fragmented tools.</div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-num">02</div>
+          <div class="problem-text"><strong>Most of it gets forgotten.</strong> Valuable insights, recurring ideas, and set goals silently decay — not because they lack value, but because no system surfaces them at the right time.</div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-num">03</div>
+          <div class="problem-text"><strong>Search doesn't solve it.</strong> You can only search for what you remember to look for. The most valuable connections are the ones you don't know to ask about.</div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-num">04</div>
+          <div class="problem-text"><strong>Existing tools optimize for capture, not retrieval.</strong> Notion, Obsidian, Drive — great for storing. None proactively bring your own knowledge back to you.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <!-- Features -->
+    <div class="about-section">
+      <div class="about-section-title">What Elio does</div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ti ti-brain"></i></div>
+          <div class="feature-title">Daily Knowledge Session</div>
+          <div class="feature-desc">A personalized 30-minute reading plan built from your knowledge base — forgotten notes, saved articles, recurring ideas — each explained in context of today.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ti ti-checklist"></i></div>
+          <div class="feature-title">Proactive Action Items</div>
+          <div class="feature-desc">AI-generated priority tasks surfaced from emails, todos, long-term goals, and deferred items. Identifies what matters now, not just what was most recently added.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ti ti-network"></i></div>
+          <div class="feature-title">Knowledge Connections</div>
+          <div class="feature-desc">Discovers hidden patterns across your data — recurring ideas, abandoned goals, topics you keep returning to — and makes them visible in plain language.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ti ti-message-circle"></i></div>
+          <div class="feature-title">Conversational Interface</div>
+          <div class="feature-desc">Ask questions about your own knowledge base. "What startup ideas have I mentioned?" "What goals have I ignored?" Answers grounded in your actual documents.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ti ti-activity"></i></div>
+          <div class="feature-title">Knowledge Feed</div>
+          <div class="feature-desc">A scrollable stream of insights, connections, reminders, and ideas — surfaced continuously from your data, not from the internet.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ti ti-plug"></i></div>
+          <div class="feature-title">Multi-source Ingestion</div>
+          <div class="feature-desc">Connects to Google Drive, Gmail, Notion, Obsidian, journals, and uploaded documents. One unified knowledge base from all your existing tools.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <!-- Architecture -->
+    <div class="about-section">
+      <div class="about-section-title">Architecture</div>
+      <div class="arch-grid">
+        <div class="arch-card">
+          <div class="arch-card-title"><i class="ti ti-database"></i> Data sources</div>
+          <div class="arch-tags">
+            <span class="arch-tag">Google Drive</span>
+            <span class="arch-tag">Gmail</span>
+            <span class="arch-tag">Google Calendar</span>
+            <span class="arch-tag">Google Tasks</span>
+            <span class="arch-tag">Notion</span>
+            <span class="arch-tag">Obsidian</span>
+            <span class="arch-tag">Markdown files</span>
+            <span class="arch-tag">Personal journals</span>
+            <span class="arch-tag">Uploaded documents</span>
+          </div>
+        </div>
+        <div class="arch-card">
+          <div class="arch-card-title"><i class="ti ti-search"></i> RAG layer</div>
+          <div class="arch-tags">
+            <span class="arch-tag">Vector embeddings</span>
+            <span class="arch-tag">Semantic search</span>
+            <span class="arch-tag">Contextual retrieval</span>
+            <span class="arch-tag">Document chunking</span>
+            <span class="arch-tag">Source citations</span>
+          </div>
+        </div>
+        <div class="arch-card">
+          <div class="arch-card-title"><i class="ti ti-cpu"></i> AI layer</div>
+          <div class="arch-tags">
+            <span class="arch-tag">Retrieval</span>
+            <span class="arch-tag">Summarization</span>
+            <span class="arch-tag">Topic clustering</span>
+            <span class="arch-tag">Pattern detection</span>
+            <span class="arch-tag">Goal alignment</span>
+            <span class="arch-tag">Daily plan generation</span>
+          </div>
+        </div>
+        <div class="arch-card">
+          <div class="arch-card-title"><i class="ti ti-layout-dashboard"></i> Frontend</div>
+          <div class="arch-tags">
+            <span class="arch-tag">Dashboard</span>
+            <span class="arch-tag">Chat interface</span>
+            <span class="arch-tag">Knowledge feed</span>
+            <span class="arch-tag">Source explorer</span>
+            <span class="arch-tag">Connection map</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <!-- Design principles -->
+    <div class="about-section">
+      <div class="about-section-title">Design principles</div>
+      <div class="principles-list">
+        <div class="principle-card">
+          <div class="principle-word">Calm</div>
+          <div class="principle-desc">No notification badges, streaks, or urgency mechanics. Knowledge surfaces gently.</div>
+        </div>
+        <div class="principle-card">
+          <div class="principle-word">Thoughtful</div>
+          <div class="principle-desc">Every surfaced item explains why it matters today. No raw data dumps.</div>
+        </div>
+        <div class="principle-card">
+          <div class="principle-word">Minimal</div>
+          <div class="principle-desc">Avoids productivity-tool aesthetics. No cluttered dashboards or feature overload.</div>
+        </div>
+        <div class="principle-card">
+          <div class="principle-word">Personal</div>
+          <div class="principle-desc">Grounded entirely in your data. Elio has no opinions — only your patterns.</div>
+        </div>
+        <div class="principle-card">
+          <div class="principle-word">Reflective</div>
+          <div class="principle-desc">Designed to help you think, not to think for you. A companion, not a manager.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-status">
+      <i class="ti ti-flask"></i>
+      <div class="about-status-body">
+        <div class="about-status-title">Frontend prototype &mdash; work in progress</div>
+        <div class="about-status-sub">This is a frontend-only prototype built with mock data to demonstrate the core experience. The RAG backend, data source integrations, and AI layer are planned for future development.</div>
+      </div>
+    </div>
+
   </div>
 
 </div>
