@@ -469,6 +469,40 @@ nav {
 .about-status-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
 .about-status-sub { font-size: 13px; color: var(--tx2); line-height: 1.6; }
 
+/* ── AUTH ── */
+#nav-auth { display: flex; align-items: center; gap: 8px; }
+.auth-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 13px; border-radius: 20px;
+  border: 0.5px solid var(--br2); background: var(--bg2);
+  font-family: inherit; font-size: 12px; font-weight: 500;
+  color: var(--tx2); cursor: pointer; text-decoration: none;
+  transition: border-color .15s, color .15s;
+}
+.auth-btn:hover { border-color: var(--a); color: var(--a); }
+.auth-btn.connected { background: var(--al); color: var(--ad); border-color: rgba(176,117,64,.3); }
+.auth-btn i { font-size: 13px; }
+.ingest-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 13px; border-radius: 20px;
+  border: 0.5px solid var(--br2); background: transparent;
+  font-family: inherit; font-size: 12px; font-weight: 500;
+  color: var(--tx3); cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.ingest-btn:hover { border-color: var(--a); color: var(--a); }
+.ingest-btn:disabled { opacity: .5; cursor: default; }
+.ingest-btn i { font-size: 13px; }
+.toast {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  background: var(--tx); color: var(--bg);
+  font-size: 13px; padding: 10px 18px; border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.18);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s; z-index: 999;
+}
+.toast.show { opacity: 1; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
   #view-dashboard { padding: 1.25rem 1rem 4rem; }
@@ -501,6 +535,7 @@ nav {
     </div>
     <span class="nav-tagline">Personal Knowledge Archaeologist</span>
   </div>
+  <div id="nav-auth"></div>
 </nav>
 
 <!-- TAB BAR -->
@@ -955,10 +990,10 @@ nav {
     </div>
 
     <div class="about-status">
-      <i class="ti ti-flask"></i>
+      <i class="ti ti-plug"></i>
       <div class="about-status-body">
-        <div class="about-status-title">Frontend prototype &mdash; work in progress</div>
-        <div class="about-status-sub">This is a frontend-only prototype built with mock data to demonstrate the core experience. The RAG backend, data source integrations, and AI layer are planned for future development.</div>
+        <div class="about-status-title">Milestone 1 — Gmail RAG connected</div>
+        <div class="about-status-sub">The backend is live. Connect your Gmail account to start ingesting emails and asking real questions about your knowledge base. Google Drive, Calendar, and Knowledge Graph connections are coming in Milestone 2.</div>
       </div>
     </div>
 
@@ -966,8 +1001,21 @@ nav {
 
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-/* VIEW SWITCHING */
+/* ── CONFIG ── */
+const API = 'http://localhost:8080';
+
+/* ── TOAST ── */
+function toast(msg, duration = 3000) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), duration);
+}
+
+/* ── VIEW SWITCHING ── */
 function switchView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -975,27 +1023,59 @@ function switchView(name) {
   document.getElementById('tab-' + name).classList.add('active');
 }
 
-/* ACTION TOGGLE */
+/* ── ACTION TOGGLE ── */
 function toggleDone(item) { item.classList.toggle('done'); }
 
-/* CHAT */
-const mockResponses = {
-  startup: "<p>I found <strong>6 distinct startup ideas</strong> across your notes and journals:</p><ol><li><strong>AI meeting intelligence</strong> &mdash; <span class='cite'><i class='ti ti-notebook' style='font-size:10px'></i> 4 journal entries</span> First mentioned Jan 2023. Growing urgency in recent entries.</li><li><strong>Finance tracker for freelancers</strong> &mdash; <span class='cite'><i class='ti ti-brand-google-drive' style='font-size:10px'></i> 2 notes</span> Feature list sketched in Feb 2024 but no follow-up.</li><li><strong>Developer onboarding tool</strong> &mdash; <span class='cite'><i class='ti ti-mail' style='font-size:10px'></i> 1 email thread</span> From a conversation about painful first-week experiences.</li><li><strong>Personal knowledge base (RAG)</strong> &mdash; <span class='cite'><i class='ti ti-notebook' style='font-size:10px'></i> 3 journal entries</span> Ironically, this is what Elio is. You had the idea 18 months ago.</li><li><strong>Async-first team docs</strong> &mdash; <span class='cite'><i class='ti ti-brand-google-drive' style='font-size:10px'></i> 1 note</span> From a frustrating sprint planning session.</li><li><strong>CLI for PostgreSQL analysis</strong> &mdash; <span class='cite'><i class='ti ti-brand-google-drive' style='font-size:10px'></i> 1 note</span> Technical sketch with sample commands.</li></ol><p>The meeting intelligence idea has the most emotional weight. Want me to pull together everything you've written about it?</p>",
-  goals: "<p>I found <strong>8 goals</strong> you've set. Here are the ones with no recent follow-up:</p><ol><li><strong>Learn Rust</strong> — Set Oct 2024. No code written. 8 articles saved but unread.</li><li><strong>Exercise 5&times; per week</strong> — Set Dec 2024. Last mention 4 months ago.</li><li><strong>Read 24 books in 2025</strong> — Set Jan 2025. Currently at 4 based on reading notes.</li><li><strong>Launch a side project</strong> — Mentioned 6 times across 2024. No concrete steps recorded.</li></ol>",
-  focus: "<p>Based on your knowledge base and pending actions, here's what I'd prioritize this week:</p><ol><li><strong>Reply to Sarah</strong> — 3 days old, high-signal architecture email. Your team is waiting.</li><li><strong>Review the auth service PR</strong> — Blocking someone. Should take under 2 hours.</li><li><strong>Spend 30 mins with your distributed systems notes</strong> — Directly applicable to your current API work.</li></ol><p>Everything else can wait without real cost.</p>",
-  rag: "<p>You have <strong>14 notes and articles</strong> about RAG across your knowledge base:</p><ul><li>A technical overview written after reading the original RAG paper (2023)</li><li>Notes comparing Pinecone, Weaviate, and pgvector</li><li>A half-written design doc for a RAG pipeline at work</li><li>6 bookmarked articles, 3 with reading annotations</li></ul><p>Interestingly, you had the idea for a personal RAG system — essentially Elio — 18 months before it existed.</p>",
-  _default: "<p>I'm searching through your notes, emails, and journals for relevant context.</p><p>In the full version, I'd retrieve the most relevant passages and synthesize a grounded answer with source citations. This is a frontend prototype — the real version uses semantic search over your embedded knowledge base.</p>",
-};
+/* ── AUTH ── */
+let currentUser = null;
 
-function getResponse(msg) {
-  const s = msg.toLowerCase();
-  if (s.includes('startup') || s.includes('idea') || s.includes('mentioned')) return mockResponses.startup;
-  if (s.includes('goal') || s.includes('ignor') || s.includes('abandon')) return mockResponses.goals;
-  if (s.includes('focus') || s.includes('week') || s.includes('prior')) return mockResponses.focus;
-  if (s.includes('rag') || s.includes('retriev')) return mockResponses.rag;
-  return mockResponses._default;
+function renderNavAuth() {
+  const el = document.getElementById('nav-auth');
+  if (currentUser) {
+    el.innerHTML = `
+      <button class="ingest-btn" id="ingest-btn" onclick="triggerIngest()" title="Sync Gmail">
+        <i class="ti ti-refresh"></i> Sync Gmail
+      </button>
+      <span class="auth-btn connected">
+        <i class="ti ti-mail"></i> ${currentUser.email}
+      </span>`;
+  } else {
+    el.innerHTML = `
+      <a class="auth-btn" href="${API}/oauth2/authorization/google">
+        <i class="ti ti-brand-google"></i> Connect Gmail
+      </a>`;
+  }
 }
 
+async function checkAuth() {
+  try {
+    const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+    if (res.ok) {
+      currentUser = await res.json();
+    } else {
+      currentUser = null;
+    }
+  } catch {
+    currentUser = null;
+  }
+  renderNavAuth();
+}
+
+async function triggerIngest() {
+  const btn = document.getElementById('ingest-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2"></i> Syncing…'; }
+  try {
+    await fetch(`${API}/ingest/gmail`, { method: 'POST', credentials: 'include' });
+    toast('Gmail sync started — this may take a minute.');
+  } catch {
+    toast('Could not reach backend. Is it running?');
+  }
+  setTimeout(() => {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-refresh"></i> Sync Gmail'; }
+  }, 5000);
+}
+
+/* ── CHAT ── */
 function appendMsg(html, isUser) {
   const msgs = document.getElementById('chat-messages');
   const d = document.createElement('div');
@@ -1017,7 +1097,42 @@ function showTyping() {
   msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
 }
 
-function sendChat(mode) {
+function buildAnswerHtml(data) {
+  let html = `<p>${escHtml(data.answer).replace(/\n/g, '<br>')}</p>`;
+  if (data.sources && data.sources.length) {
+    html += '<div style="margin-top:.75rem;display:flex;flex-direction:column;gap:4px">';
+    data.sources.forEach(s => {
+      html += `<span class="cite"><i class="ti ti-mail" style="font-size:10px"></i> ${escHtml(s.subject || 'Email')} — ${escHtml(s.sender || '')}</span>`;
+    });
+    html += '</div>';
+  }
+  return html;
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function callApi(query) {
+  if (!currentUser) {
+    return `<p>Please <a href="${API}/oauth2/authorization/google" style="color:var(--a)">connect your Gmail</a> first so Elio can search your knowledge base.</p>`;
+  }
+  try {
+    const res = await fetch(`${API}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ query })
+    });
+    if (!res.ok) throw new Error('status ' + res.status);
+    const data = await res.json();
+    return buildAnswerHtml(data);
+  } catch (e) {
+    return `<p style="color:var(--tx2)">Could not reach backend (<code style="font-size:11px">${API}</code>). Make sure the api-gateway is running on port 8080.</p>`;
+  }
+}
+
+async function sendChat(mode) {
   const input = document.getElementById('chat-input-' + mode);
   const text = input.value.trim();
   if (!text) return;
@@ -1030,14 +1145,14 @@ function sendChat(mode) {
     active.classList.add('on');
   }
 
-  appendMsg(text, true);
+  appendMsg(escHtml(text), true);
   showTyping();
-  setTimeout(() => {
-    const t = document.getElementById('chat-typing');
-    if (t) t.remove();
-    appendMsg(getResponse(text), false);
-    document.getElementById('chat-input-active').focus();
-  }, 900 + Math.random() * 500);
+
+  const html = await callApi(text);
+  const t = document.getElementById('chat-typing');
+  if (t) t.remove();
+  appendMsg(html, false);
+  document.getElementById('chat-input-active').focus();
 }
 
 function sendSugg(btn) {
@@ -1055,7 +1170,7 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
-/* GREETING */
+/* ── GREETING ── */
 (function () {
   const h = new Date().getHours();
   const greet = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
@@ -1066,6 +1181,18 @@ function autoResize(el) {
   const tEl = document.getElementById('dash-time');
   if (hEl) hEl.textContent = greet + ', Deep.';
   if (tEl) tEl.textContent = dateStr + ' · ' + period;
+})();
+
+/* ── INIT ── */
+(async function init() {
+  await checkAuth();
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('connected') === 'true') {
+    toast('Gmail connected! Starting sync…', 4000);
+    history.replaceState({}, '', window.location.pathname);
+    await triggerIngest();
+  }
 })();
 </script>
 </body>
