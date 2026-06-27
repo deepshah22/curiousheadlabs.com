@@ -563,9 +563,9 @@ nav {
     <div class="dash-greeting">
       <div class="dash-time" id="dash-time"></div>
       <div class="dash-h" id="dash-h">Good morning, Deep.</div>
-      <div class="dash-sub">I found <strong>3 things worth revisiting</strong> from your knowledge base and surfaced <strong>5 actions</strong> that need attention.</div>
+      <div class="dash-sub" id="dash-sub">Loading your knowledge base…</div>
       <span class="session-badge">
-        <i class="ti ti-clock"></i> 30-min session &middot; Curated from 2,847 notes
+        <i class="ti ti-clock"></i> <span id="dash-badge-text">Connecting…</span>
       </span>
     </div>
 
@@ -633,55 +633,10 @@ nav {
             <div class="sec-title"><i class="ti ti-checklist"></i> Today's Actions</div>
             <button class="sec-more">5 items</button>
           </div>
-          <div class="actions-grid">
-            <div class="action-item" onclick="toggleDone(this)">
-              <div class="action-check"></div>
+          <div class="actions-grid" id="actions-grid">
+            <div class="action-item" style="cursor:default;opacity:.6">
               <div class="action-body">
-                <div class="action-title">Reply to Sarah about the architecture proposal</div>
-                <div class="action-meta">
-                  <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 3 days ago</span>
-                  <span class="action-pri pri-hi">High</span>
-                </div>
-              </div>
-            </div>
-            <div class="action-item" onclick="toggleDone(this)">
-              <div class="action-check"></div>
-              <div class="action-body">
-                <div class="action-title">Review auth service PR — team is blocked</div>
-                <div class="action-meta">
-                  <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail &middot; 1 day ago</span>
-                  <span class="action-pri pri-hi">High</span>
-                </div>
-              </div>
-            </div>
-            <div class="action-item" onclick="toggleDone(this)">
-              <div class="action-check"></div>
-              <div class="action-body">
-                <div class="action-title">Follow up on the freelance contract from November</div>
-                <div class="action-meta">
-                  <span class="action-src"><i class="ti ti-notebook" style="font-size:11px;vertical-align:-1px"></i> Journal &middot; 6 months ago</span>
-                  <span class="action-pri pri-med">Med</span>
-                </div>
-              </div>
-            </div>
-            <div class="action-item" onclick="toggleDone(this)">
-              <div class="action-check"></div>
-              <div class="action-body">
-                <div class="action-title">Schedule the quarterly review you planned</div>
-                <div class="action-meta">
-                  <span class="action-src"><i class="ti ti-brand-google-drive" style="font-size:11px;vertical-align:-1px"></i> Drive &middot; 3 months ago</span>
-                  <span class="action-pri pri-med">Med</span>
-                </div>
-              </div>
-            </div>
-            <div class="action-item" onclick="toggleDone(this)">
-              <div class="action-check"></div>
-              <div class="action-body">
-                <div class="action-title">Read 2 bookmarked articles on Rust async</div>
-                <div class="action-meta">
-                  <span class="action-src"><i class="ti ti-bookmark" style="font-size:11px;vertical-align:-1px"></i> Bookmarks &middot; 2 months ago</span>
-                  <span class="action-pri pri-lo">Low</span>
-                </div>
+                <div class="action-title" style="font-size:13px;color:var(--tx3)">Loading tasks…</div>
               </div>
             </div>
           </div>
@@ -689,33 +644,27 @@ nav {
 
       </div>
 
-      <!-- Column 3: Knowledge Connections -->
+      <!-- Column 3: People & Projects -->
       <div>
         <div class="dash-section">
           <div class="sec-head">
-            <div class="sec-title"><i class="ti ti-network"></i> Knowledge Connections</div>
-            <button class="sec-more">View map</button>
+            <div class="sec-title"><i class="ti ti-users"></i> People</div>
+            <button class="sec-more" onclick="askElio('Who are the people I communicate with most?')">Ask Elio</button>
           </div>
-          <div class="conn-grid">
-            <div class="conn-card">
-              <div class="conn-top"><div class="conn-icon"><i class="ti ti-repeat"></i></div><span class="conn-type">Recurring theme</span></div>
-              <div class="conn-text">"You've mentioned distributed systems in 7 notes over the past 2 years."</div>
-              <div class="conn-sub">Notes &middot; Drive &middot; Gmail &middot; 3 clusters found</div>
+          <div class="conn-grid" id="people-grid">
+            <div class="conn-card" style="cursor:default;opacity:.6">
+              <div class="conn-text" style="font-size:13px;color:var(--tx3)">Loading people…</div>
             </div>
-            <div class="conn-card">
-              <div class="conn-top"><div class="conn-icon"><i class="ti ti-bulb"></i></div><span class="conn-type">Idea pattern</span></div>
-              <div class="conn-text">"Your meeting intelligence idea appears across 4 separate journals."</div>
-              <div class="conn-sub">First mentioned Jan 2023 &middot; Growing frequency</div>
-            </div>
-            <div class="conn-card">
-              <div class="conn-top"><div class="conn-icon"><i class="ti ti-clock-pause"></i></div><span class="conn-type">Abandoned goal</span></div>
-              <div class="conn-text">"You set a goal to exercise 5&times; per week in December. Last mention was 4 months ago."</div>
-              <div class="conn-sub">Goal &middot; Journal &middot; 0 follow-ups detected</div>
-            </div>
-            <div class="conn-card">
-              <div class="conn-top"><div class="conn-icon"><i class="ti ti-books"></i></div><span class="conn-type">Reading debt</span></div>
-              <div class="conn-text">"You've saved 23 articles on machine learning. Fewer than 5 have reading notes."</div>
-              <div class="conn-sub">Bookmarks &middot; 23 items &middot; ~8 hrs estimated</div>
+          </div>
+        </div>
+        <div class="dash-section">
+          <div class="sec-head">
+            <div class="sec-title"><i class="ti ti-folder"></i> Projects</div>
+            <button class="sec-more" onclick="askElio('What projects am I actively working on?')">Ask Elio</button>
+          </div>
+          <div class="conn-grid" id="projects-grid">
+            <div class="conn-card" style="cursor:default;opacity:.6">
+              <div class="conn-text" style="font-size:13px;color:var(--tx3)">Loading projects…</div>
             </div>
           </div>
         </div>
@@ -738,10 +687,10 @@ nav {
       <div class="chat-empty-h">What would you like to explore?</div>
       <div class="chat-empty-sub">I have access to your notes, emails, and journals — ask me anything.</div>
       <div class="chat-suggs">
-        <button class="sugg" onclick="sendSugg(this)">What startup ideas have I mentioned?</button>
-        <button class="sugg" onclick="sendSugg(this)">What goals have I ignored?</button>
-        <button class="sugg" onclick="sendSugg(this)">What should I focus on this week?</button>
-        <button class="sugg" onclick="sendSugg(this)">What do I know about RAG?</button>
+        <button class="sugg" onclick="sendSugg(this)">What projects am I actively working on?</button>
+        <button class="sugg" onclick="sendSugg(this)">What decisions have I made recently?</button>
+        <button class="sugg" onclick="sendSugg(this)">What tasks are waiting on me?</button>
+        <button class="sugg" onclick="sendSugg(this)">Who have I been communicating with most?</button>
       </div>
       <div class="chat-empty-input">
         <textarea class="chat-input" id="chat-input-empty" placeholder="Ask about your knowledge base…" rows="1"
@@ -990,10 +939,10 @@ nav {
     </div>
 
     <div class="about-status">
-      <i class="ti ti-plug"></i>
+      <i class="ti ti-brain"></i>
       <div class="about-status-body">
-        <div class="about-status-title">Milestone 1 — Gmail RAG connected</div>
-        <div class="about-status-sub">The backend is live. Connect your Gmail account to start ingesting emails and asking real questions about your knowledge base. Google Drive, Calendar, and Knowledge Graph connections are coming in Milestone 2.</div>
+        <div class="about-status-title">Milestone 2 — Structured Memory + Intelligence Layer</div>
+        <div class="about-status-sub">Entity extraction is live. Elio now identifies people, projects, decisions, tasks, and events from your emails and builds a structured knowledge graph. Hybrid search (semantic + full-text + recency ranking) powers all queries. Ask "What projects am I working on?" or "Who have I been talking to?" for real answers.</div>
       </div>
     </div>
 
@@ -1038,7 +987,10 @@ function renderNavAuth() {
       </button>
       <span class="auth-btn connected">
         <i class="ti ti-mail"></i> ${currentUser.email}
-      </span>`;
+      </span>
+      <button class="ingest-btn" onclick="signOut()" title="Sign out">
+        <i class="ti ti-logout"></i>
+      </button>`;
   } else {
     el.innerHTML = `
       <a class="auth-btn" href="${API}/oauth2/authorization/google">
@@ -1061,18 +1013,67 @@ async function checkAuth() {
   renderNavAuth();
 }
 
+async function signOut() {
+  try {
+    await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include', redirect: 'manual' });
+  } catch (e) {}
+  currentUser = null;
+  renderNavAuth();
+  await loadDashboard();
+}
+
+let syncPoller = null;
+let syncLastDocCount = 0;
+
 async function triggerIngest() {
+  if (syncPoller) return; // already syncing
   const btn = document.getElementById('ingest-btn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2"></i> Syncing…'; }
   try {
     await fetch(`${API}/ingest/gmail`, { method: 'POST', credentials: 'include' });
-    toast('Gmail sync started — this may take a minute.');
+    toast('Gmail sync started — updating as emails are processed.');
+    syncLastDocCount = 0;
+    startSyncPoller();
   } catch {
     toast('Could not reach backend. Is it running?');
-  }
-  setTimeout(() => {
     if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-refresh"></i> Sync Gmail'; }
-  }, 5000);
+  }
+}
+
+function startSyncPoller() {
+  let stableRounds = 0;
+  syncPoller = setInterval(async () => {
+    try {
+      const res = await fetch(`${API}/ingest/status`, { credentials: 'include' });
+      if (!res.ok) return;
+      const data = await res.json();
+      const docs = data.documentCount || 0;
+
+      const btn = document.getElementById('ingest-btn');
+      if (btn) btn.innerHTML = `<i class="ti ti-loader-2"></i> ${docs} emails…`;
+
+      if (docs > 0 && docs === syncLastDocCount) {
+        stableRounds++;
+      } else {
+        stableRounds = 0;
+      }
+      syncLastDocCount = docs;
+
+      // 3 stable rounds (~9s with no new docs) = done
+      if (stableRounds >= 3) {
+        stopSyncPoller(docs);
+      }
+    } catch { /* network blip, keep polling */ }
+  }, 3000);
+}
+
+async function stopSyncPoller(finalDocCount) {
+  clearInterval(syncPoller);
+  syncPoller = null;
+  const btn = document.getElementById('ingest-btn');
+  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-refresh"></i> Sync Gmail'; }
+  toast(`Sync complete — ${finalDocCount} emails indexed.`, 5000);
+  await loadDashboard();
 }
 
 /* ── CHAT ── */
@@ -1170,6 +1171,120 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
+/* ── ENTITIES / DASHBOARD ── */
+async function fetchEntities(type, limit = 8) {
+  const res = await fetch(`${API}/entities?type=${type}&limit=${limit}`, { credentials: 'include' });
+  if (!res.ok) throw new Error('status ' + res.status);
+  return res.json();
+}
+
+function relativeDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso.replace('T', ' '));
+  const days = Math.round((Date.now() - d) / 86400000);
+  if (days === 0) return 'today';
+  if (days === 1) return 'yesterday';
+  if (days < 30) return days + 'd ago';
+  if (days < 365) return Math.round(days / 30) + 'mo ago';
+  return Math.round(days / 365) + 'yr ago';
+}
+
+function askElio(query) {
+  switchView('chat');
+  setTimeout(() => {
+    document.getElementById('chat-input-empty').value = query;
+    sendChat('empty');
+  }, 50);
+}
+
+function renderTasks(items) {
+  const grid = document.getElementById('actions-grid');
+  if (!items || !items.length) {
+    grid.innerHTML = '<div class="action-item" style="cursor:default"><div class="action-body"><div class="action-title" style="color:var(--tx3);font-size:13px">No tasks found yet — sync Gmail to extract action items.</div></div></div>';
+    return;
+  }
+  grid.innerHTML = items.map(t => `
+    <div class="action-item" onclick="toggleDone(this)">
+      <div class="action-check"></div>
+      <div class="action-body">
+        <div class="action-title">${escHtml(t.name)}</div>
+        <div class="action-meta">
+          <span class="action-src"><i class="ti ti-mail" style="font-size:11px;vertical-align:-1px"></i> Gmail${t.assignee ? ' · ' + escHtml(t.assignee) : ''}</span>
+          <span class="action-pri pri-med">${escHtml(t.status || 'open')}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPeople(items) {
+  const grid = document.getElementById('people-grid');
+  if (!items || !items.length) {
+    grid.innerHTML = '<div class="conn-card" style="cursor:default"><div class="conn-text" style="color:var(--tx3);font-size:13px">No people extracted yet.</div></div>';
+    return;
+  }
+  grid.innerHTML = items.map(p => `
+    <div class="conn-card" onclick="askElio('Summarize all my interactions with ${escHtml(p.name)}')">
+      <div class="conn-top">
+        <div class="conn-icon"><i class="ti ti-user"></i></div>
+        <span class="conn-type">Person · ${p.mentionCount} mention${p.mentionCount !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="conn-text">${escHtml(p.name)}</div>
+      <div class="conn-sub">Last seen ${relativeDate(p.lastSeenAt)}</div>
+    </div>`).join('');
+}
+
+function renderProjects(items) {
+  const grid = document.getElementById('projects-grid');
+  if (!items || !items.length) {
+    grid.innerHTML = '<div class="conn-card" style="cursor:default"><div class="conn-text" style="color:var(--tx3);font-size:13px">No projects extracted yet.</div></div>';
+    return;
+  }
+  grid.innerHTML = items.map(p => `
+    <div class="conn-card" onclick="askElio('Tell me about the ${escHtml(p.name)} project and its current status')">
+      <div class="conn-top">
+        <div class="conn-icon"><i class="ti ti-folder"></i></div>
+        <span class="conn-type">Project · ${p.mentionCount} mention${p.mentionCount !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="conn-text">${escHtml(p.name)}</div>
+      <div class="conn-sub">Last seen ${relativeDate(p.lastSeenAt)}</div>
+    </div>`).join('');
+}
+
+async function loadDashboard() {
+  if (!currentUser) {
+    document.getElementById('dash-sub').innerHTML = 'Connect your Gmail to start building your knowledge base.';
+    document.getElementById('dash-badge-text').textContent = 'Not connected';
+    document.getElementById('actions-grid').innerHTML = '<div class="action-item" style="cursor:default"><div class="action-body"><div class="action-title" style="color:var(--tx3);font-size:13px">Connect Gmail to see your tasks.</div></div></div>';
+    document.getElementById('people-grid').innerHTML = '<div class="conn-card" style="cursor:default"><div class="conn-text" style="color:var(--tx3);font-size:13px">Connect Gmail to see people.</div></div>';
+    document.getElementById('projects-grid').innerHTML = '<div class="conn-card" style="cursor:default"><div class="conn-text" style="color:var(--tx3);font-size:13px">Connect Gmail to see projects.</div></div>';
+    return;
+  }
+
+  try {
+    const [tasks, people, projects] = await Promise.all([
+      fetchEntities('tasks', 8),
+      fetchEntities('people', 6),
+      fetchEntities('projects', 6),
+    ]);
+
+    renderTasks(tasks.items);
+    renderPeople(people.items);
+    renderProjects(projects.items);
+
+    const taskCount = tasks.items ? tasks.items.length : 0;
+    const peopleCount = people.items ? people.items.length : 0;
+    const projectCount = projects.items ? projects.items.length : 0;
+
+    document.getElementById('dash-sub').innerHTML =
+      `Elio knows <strong>${peopleCount} people</strong> and <strong>${projectCount} projects</strong> from your emails, and surfaced <strong>${taskCount} open tasks</strong>.`;
+    document.getElementById('dash-badge-text').textContent =
+      `${peopleCount} people · ${projectCount} projects · ${taskCount} tasks`;
+  } catch (e) {
+    document.getElementById('dash-sub').textContent = 'Could not load dashboard data — make sure all services are running.';
+    document.getElementById('dash-badge-text').textContent = 'Error loading data';
+  }
+}
+
 /* ── GREETING ── */
 (function () {
   const h = new Date().getHours();
@@ -1186,6 +1301,7 @@ function autoResize(el) {
 /* ── INIT ── */
 (async function init() {
   await checkAuth();
+  await loadDashboard();
 
   const params = new URLSearchParams(window.location.search);
   if (params.get('connected') === 'true') {
