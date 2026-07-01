@@ -37,10 +37,6 @@ A self-contained frontend for the Elio "Personal Knowledge Archaeologist" produc
 
 Icons in Elio use Tabler Icons (`@tabler/icons-webfont`), unlike the main site which uses Phosphor.
 
-### `design-preview.html`
-
-A standalone design scratchpad — not linked from the main site, used for visual iteration.
-
 ## Skills
 
 Design skills are installed in `.agents/skills/` and tracked in `skills-lock.json`. The active design vocabulary for this project is drawn from those skills (Leonxlnx/taste-skill). When making UI changes, the `design-taste-frontend`, `high-end-visual-design`, or `minimalist-ui` skills are the relevant references for stylistic decisions.
