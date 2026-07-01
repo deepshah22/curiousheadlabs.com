@@ -396,6 +396,107 @@ nav {
 }
 .stat-l { font-size: 11.5px; color: var(--tx3); margin-top: 6px; font-weight: 500; letter-spacing: .02em; }
 
+/* ── AI PIPELINE (Elio, live) ── */
+.home-pipe { position: relative; z-index: 1; padding-top: 4.5rem; }
+.pipe-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.75rem;
+}
+.pipe-head .section-label { margin-bottom: 0; }
+.pipe-caption { font-size: 13.5px; color: var(--tx2); line-height: 1.65; max-width: 460px; }
+.pipe-caption b { color: var(--tx); font-weight: 600; }
+
+.pipeline {
+  border: 1px solid var(--br); border-radius: var(--rl);
+  background: linear-gradient(180deg, var(--bg2), var(--bg));
+  padding: 2.5rem 2rem 2.25rem;
+}
+.pipeline-flow { display: flex; align-items: stretch; }
+
+.pnode {
+  flex: 0 0 auto; width: 136px;
+  background: var(--bg); border: 1px solid var(--br); border-radius: var(--r);
+  padding: .95rem .9rem;
+  display: flex; flex-direction: column; gap: .6rem; position: relative;
+  transition: border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.pnode:hover {
+  border-color: rgba(140,132,236,0.45); transform: translateY(-3px);
+  box-shadow: 0 12px 34px -14px rgba(0,0,0,.28);
+}
+.pnode-ic {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--pg); color: var(--p);
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.pnode-t { font-size: 12.5px; font-weight: 700; letter-spacing: -.2px; line-height: 1.25; }
+.pnode-s { font-size: 10.5px; color: var(--tx3); font-weight: 500; margin-top: -.2rem; }
+
+.plink { flex: 1 1 auto; min-width: 24px; position: relative; align-self: center; height: 2px; }
+.plink-track { position: absolute; inset: 0; background: var(--br2); border-radius: 2px; }
+.plink-track::after {
+  content: ''; position: absolute; right: -1px; top: 50%;
+  width: 0; height: 0; transform: translateY(-50%);
+  border-left: 5px solid var(--br2);
+  border-top: 3px solid transparent; border-bottom: 3px solid transparent;
+}
+.plink-dot {
+  position: absolute; top: 50%; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--p); box-shadow: 0 0 9px 1px rgba(109,100,214,.75);
+  transform: translate(-50%, -50%);
+  animation: flowX 2.6s linear infinite; animation-delay: var(--d, 0s);
+}
+@keyframes flowX {
+  0% { left: 0; opacity: 0; } 12% { opacity: 1; }
+  88% { opacity: 1; } 100% { left: 100%; opacity: 0; }
+}
+
+.pipe-loop { position: relative; margin-top: 1.65rem; height: 30px; }
+.pipe-loop-line {
+  position: absolute; left: 8px; right: 8px; top: 14px;
+  border-top: 1.5px dashed var(--br2);
+}
+.pipe-loop-dot {
+  position: absolute; top: 14px; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--tk); box-shadow: 0 0 8px 1px rgba(47,158,99,.6);
+  transform: translate(50%, -50%);
+  animation: flowBack 3.4s linear infinite; animation-delay: var(--d, 0s);
+}
+@keyframes flowBack {
+  0% { right: 0; opacity: 0; } 12% { opacity: 1; }
+  88% { opacity: 1; } 100% { right: 100%; opacity: 0; }
+}
+.pipe-loop-tag {
+  position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  background: var(--bg); padding: 0 .7rem;
+  font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--tk);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.pipe-loop-tag i { font-size: 13px; }
+
+@media (max-width: 720px) {
+  .pipeline { padding: 2rem 1.25rem; }
+  .pipeline-flow { flex-direction: column; align-items: stretch; gap: 0; }
+  .pnode { width: auto; flex-direction: row; align-items: center; gap: .8rem; }
+  .pnode-s { margin-top: 0; }
+  .plink { width: 2px; height: 22px; align-self: center; margin: 2px 0; }
+  .plink-track::after {
+    right: 50%; top: auto; bottom: -1px; transform: translateX(50%);
+    border-left: 3px solid transparent; border-right: 3px solid transparent;
+    border-top: 5px solid var(--br2); border-bottom: 0;
+  }
+  .plink-dot { animation-name: flowY; }
+  .pipe-loop { margin-top: 1.25rem; }
+}
+@keyframes flowY {
+  0% { top: 0; opacity: 0; } 12% { opacity: 1; }
+  88% { opacity: 1; } 100% { top: 100%; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plink-dot, .pipe-loop-dot { animation: none; opacity: .9; }
+  .plink-dot { left: 100%; } .pipe-loop-dot { right: 100%; }
+}
+
 /* ══════════════════════════════════
    NEURAL CANVAS — living AI backdrop
 ══════════════════════════════════ */
@@ -907,11 +1008,73 @@ footer a:hover { color: var(--tx); }
     </div>
   </section>
 
+  <!-- AI pipeline: how Elio actually runs -->
+  <section class="home-pipe reveal" aria-label="AI pipeline">
+    <div class="pipe-head">
+      <span class="section-label">How I build AI</span>
+      <p class="pipe-caption">The real <b>RAG pipeline behind Elio</b> — from your inbox to a grounded answer. Retrieval, reranking, routed inference, and an eval loop watching for drift. Shipped, not sketched.</p>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipeline-flow">
+
+        <div class="pnode">
+          <div class="pnode-ic"><i class="ph-bold ph-envelope-simple"></i></div>
+          <div class="pnode-t">Gmail &amp; notes</div>
+          <div class="pnode-s">Your context</div>
+        </div>
+        <div class="plink"><span class="plink-track"></span><span class="plink-dot" style="--d:0s"></span></div>
+
+        <div class="pnode">
+          <div class="pnode-ic"><i class="ph-bold ph-plugs-connected"></i></div>
+          <div class="pnode-t">Ingest</div>
+          <div class="pnode-s">OAuth2 · Spring</div>
+        </div>
+        <div class="plink"><span class="plink-track"></span><span class="plink-dot" style="--d:.5s"></span></div>
+
+        <div class="pnode">
+          <div class="pnode-ic"><i class="ph-bold ph-cube"></i></div>
+          <div class="pnode-t">Chunk &amp; embed</div>
+          <div class="pnode-s">Pinecone</div>
+        </div>
+        <div class="plink"><span class="plink-track"></span><span class="plink-dot" style="--d:1s"></span></div>
+
+        <div class="pnode">
+          <div class="pnode-ic"><i class="ph-bold ph-funnel"></i></div>
+          <div class="pnode-t">Retrieve &amp; rerank</div>
+          <div class="pnode-s">Hybrid search</div>
+        </div>
+        <div class="plink"><span class="plink-track"></span><span class="plink-dot" style="--d:1.5s"></span></div>
+
+        <div class="pnode">
+          <div class="pnode-ic"><i class="ph-bold ph-brain"></i></div>
+          <div class="pnode-t">Claude</div>
+          <div class="pnode-s">Model routing</div>
+        </div>
+        <div class="plink"><span class="plink-track"></span><span class="plink-dot" style="--d:2s"></span></div>
+
+        <div class="pnode">
+          <div class="pnode-ic"><i class="ph-bold ph-lightning"></i></div>
+          <div class="pnode-t">Streamed answer</div>
+          <div class="pnode-s">Grounded, cited</div>
+        </div>
+
+      </div>
+
+      <div class="pipe-loop">
+        <span class="pipe-loop-line"></span>
+        <span class="pipe-loop-dot" style="--d:0s"></span>
+        <span class="pipe-loop-dot" style="--d:1.7s"></span>
+        <span class="pipe-loop-tag"><i class="ph-bold ph-arrow-u-up-left"></i> Eval loop · traces · drift detection</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Stats -->
   <div class="home-stats reveal" id="home-stats">
     <div class="stat-cell"><span class="stat-n" id="sn0">0</span><div class="stat-l">Systems shipped</div></div>
     <div class="stat-cell"><span class="stat-n" id="sn1">0</span><div class="stat-l">Years in backend</div></div>
-    <div class="stat-cell"><span class="stat-n" id="sn2">0</span><div class="stat-l">Teams supported</div></div>
+    <div class="stat-cell"><span class="stat-n" id="sn2">0</span><div class="stat-l">Uptime, always chasing</div></div>
     <div class="stat-cell"><span class="stat-n" id="sn3">&#8734;</span><div class="stat-l">Open questions</div></div>
   </div>
 
@@ -1116,8 +1279,12 @@ setTimeout(type, 900);
 let countersRun = false;
 function startCounters() {
   if (countersRun) return; countersRun = true;
-  const targets = [24, 6, 12];
-  targets.forEach((t, i) => {
+  const stats = [
+    { t: 4,    dec: 0, suffix: '' },
+    { t: 10,   dec: 0, suffix: '' },
+    { t: 99.9, dec: 1, suffix: '%' },
+  ];
+  stats.forEach(({ t, dec, suffix }, i) => {
     const el = document.getElementById('sn' + i);
     if (!el) return;
     let start = null;
@@ -1125,7 +1292,7 @@ function startCounters() {
       if (!start) start = ts;
       const p = Math.min((ts - start) / 1000, 1);
       const ease = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(ease * t);
+      el.textContent = (ease * t).toFixed(dec) + suffix;
       if (p < 1) requestAnimationFrame(step);
     })(performance.now());
   });
